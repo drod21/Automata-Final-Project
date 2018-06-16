@@ -44,6 +44,31 @@ class User {
         return success;
     }
     
+    string depositToChecking(double depositAmount) {
+        this.checkingAmount += depositAmount;
+        return "Successful deposit to Checking";
+    }
+    
+    string depositToSavings(double depositAmount) {
+        this.savingsAmount += depositAmount;
+        return "Successful deposit to Savings";
+    }
+    
+    string transferMoney(string toAccount, double transferAmount) {
+        string success = "Successful transfer to " + toAccount + " account.";
+        if (toAccount == "checking" && this.savingsAmount >= transferAmount) {
+            this.savingsAmount -= transferAmount;
+            this.checkingAmount += transferAmount;
+        }
+        
+        if (toAccount == "savings" && this.checkingAmount >= transferAmount) {
+            this.checkingAmount -= transferAmount;
+            this.savingsAmount += transferAmount;
+        }
+        
+        return success;
+    }
+    
     boolean withdrawAmountValid(double withdrawAmount) {
         return (withdrawAmount >= 10 && withdrawAmount <= 500) ? true : false;
     }
@@ -52,5 +77,8 @@ class User {
         return (pin == this.pin) ? true : false;
     }
     
+    void printCheckingInfo() {
+        cout << "Remaining Checking account balance"
+    }
 };
 #endif /* User_h */
