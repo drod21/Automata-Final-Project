@@ -19,11 +19,7 @@ class User {
     // generates new user
     User(int accountNumber, int pin) {
         this.accountNumber = accountNumber;
-        
-        
-    }
-    
-    void withdrawFromAcct(string account, double withdrawAmount) {
+        // whatever else we need to do for this.
         
     }
     
@@ -41,7 +37,7 @@ class User {
     string withdrawFromSavings(double withdrawAmount) {
         string success = "Successful withdrawal";
         string error = "Insufficient funds";
-        if (withdrawAmount > this.checkingAmount)
+        if (withdrawAmount > this.savingsAmount)
             return error;
         
         this.savingsAmount -= withdrawAmount;
