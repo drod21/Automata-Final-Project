@@ -1,0 +1,186 @@
+
+// importing what we need 
+
+string state = main;
+
+
+
+
+
+while(true)
+{
+    switch(state)
+    {
+        case main: 
+            Output welcome message with options R for register, L for login;
+            state = mainwait; // to prevent the message from spamming while waiting for the user to put in a valid option, i decided to use a seperate state.
+            break;
+
+        case mainwait:
+            read user input;
+            if(userinput == "R") // If register chosen, go to register
+            {
+                state = Register;
+                break;
+            }
+            if(userinput == "L") // If Login chose, go to login
+            {
+                state = Login;
+                break;
+            }
+            state = mainwait;
+            break;
+        case Register:
+        Prompt for desired user account number;
+        read user input;
+        state = RegisterCheckValid;
+        break;
+
+        case RegisterCheckValid:
+        check if userinput is only numbers and 7 digits long; (Should we have a seperate state for each check?)
+        if(notvalid)
+        {
+            output "Account number must be 7 numbers only";
+            state = Register;
+            break;
+        }
+        else
+        {
+            state = RegisterCheckAvailable;
+            break;
+        }
+
+        case RegisterCheckAvailable:
+        check if userinput is not already taken (in linked list?)
+        if(taken)
+        {
+            output "Account number already exists";
+            state = Register;
+            break
+        }
+        else
+        {
+            state = RegisterAskPin;
+            break;
+        }
+
+        case RegisterAskPin:
+        prompt user to choose pin with only 4 digits and numbers;
+        state = RegisterPinValid;
+        break
+
+        case RegisterPinValid:
+        check if pin is all #'s and 4 digits long (Do you think these checks should be seperate states?)
+        if(PinValid)
+        {
+           create object with account number and pin, default checking and saving balance to 0, and lockout time to now.
+           output "Account created"
+           state = main;
+           break;
+        }
+        else
+        {
+            output "Pin must be 4 numbers only"
+            state = RegisterAskPin;
+            break;
+        }
+
+        case Login:
+        prompt for user to input account number;
+        read user input;
+        state = LoginAccountValid;
+        break;
+
+        case LoginAccountValid:
+        search (linked list?) for account number, stopping if found or at the end;
+        if(found)
+        {
+            state = LoginAskPin;
+            break;
+        }
+        else
+        {
+            output that account is not valid;
+            state = Login;
+            break;
+        }
+
+        
+
+        case LoginAskPin:
+        prompts user for their account pin number;
+        read userinput;
+        state = LoginPinCheck;
+        break;
+
+        case LoginPinCheck:
+        if(userinput = account.pin)
+        {
+            state = LoginCheckLockout;
+            pincounter = 0;
+            break;
+        }
+        else
+        {
+            output invalid pin;
+            state = LoginPinFailed1;
+            pincounter = 1;
+            break;
+        }
+
+        case LoginCheckLockout:
+        if(currentime >= lockouttime)
+        {
+            state = LoggedInMain;
+            break;
+        }
+        else
+        {
+            output "ACCOUNT LOCKED OUT UNTIL lockouttime";
+            state = main;
+            break;
+        }
+
+    case LoginPinFailed1:
+    prompt user for second attempt at pin;
+    read user input;
+    if(userinput = account.pin)
+        {
+            state = LoggedInMain;
+            pincounter = 0;
+            break;
+        }
+        else
+        {
+            output invalid pin;
+            state = LoginPinFailed2;
+            pincounter = 2;
+            break;
+        }
+
+    case LoginPinFailed2:
+    prompt user for third and final attempt at pin (warn lockout);
+    read userinput;
+
+    if(userinput = account.pin)
+        {
+            state = LoggedInMain;
+            pincounter = 0;
+            break;
+        }
+        else
+        {
+            state = LoginPinFailed3;
+            pincounter = 0;
+            break;
+        }
+
+    case LoginPinFailed3:
+    Account.lockouttime = currentime+1min;
+    prompt user that account is locked until Account.lockouttime;
+    state = main;
+    break;
+        
+    /////////// NEEDS LOGGED IN MAIN MENU + WITHDRAW/DEPOSIT/ACCOUNTBAL ////////
+    }
+}
