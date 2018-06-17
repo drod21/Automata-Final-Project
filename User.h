@@ -5,6 +5,7 @@
 //  Created by Derek Rodriguez on 6/15/18.
 //
 #include <iostream>
+#include <string>
 #ifndef User_h
 #define User_h
 
@@ -18,39 +19,44 @@ class User {
     public:
     // generates new user
     User(int accountNumber, int pin) {
-        this.accountNumber = accountNumber;
+        this->accountNumber = accountNumber;
         // whatever else we need to do for this.
         
     }
     
-    string withdrawFromChecking(double withdrawAmount) {
-        string success = "Successful withdrawal";
-        string error = "Insufficient funds";
+   std::string withdrawFromChecking(double withdrawAmount) {
+        std::string success = "Successful withdrawal";
+       std::string error = "Insufficient funds";
         
-        if (withdrawAmount > this.checkingAmount)
+        if (withdrawAmount > this->checkingAmount)
             return error;
         
-        this.checkingAmount -= withdrawAmount;
+        this->checkingAmount -= withdrawAmount;
         return success;
     }
     
-    string withdrawFromSavings(double withdrawAmount) {
-        string success = "Successful withdrawal";
-        string error = "Insufficient funds";
-        if (withdrawAmount > this.savingsAmount)
+    std::string withdrawFromSavings(double withdrawAmount) {
+        std::string success = "Successful withdrawal";
+        std::string error = "Insufficient funds";
+        if (withdrawAmount > this->savingsAmount)
             return error;
         
-        this.savingsAmount -= withdrawAmount;
+        this->savingsAmount -= withdrawAmount;
         return success;
     }
     
-    boolean withdrawAmountValid(double withdrawAmount) {
+    bool withdrawAmountValid(double withdrawAmount) {
         return (withdrawAmount >= 10 && withdrawAmount <= 500) ? true : false;
     }
     
-    boolean validatePIN(int pin) {
-        return (pin == this.pin) ? true : false;
+    bool validatePIN(int pin) {
+        return (pin == this->pin) ? true : false;
     }
+    
+    int getaccountNumber()
+    {
+    	return accountNumber;
+	}
     
 };
 #endif /* User_h */
