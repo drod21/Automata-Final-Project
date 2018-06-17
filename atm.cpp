@@ -18,10 +18,8 @@ int main() {
 	vector<User> Accounts;
 	vector<User>::iterator iter;
 	
-	while(true)
-	{
-		switch(state)
-		{	
+	while(true) {
+		switch(state) {
 			case 0: // Main
 				cout << "Welcome to AMDO ATM!" << endl;
 				state = 1;
@@ -33,14 +31,12 @@ int main() {
 				
 				cout << userinput << endl;
 				
-				if(userinput == "R")
-				{
+                if(userinput == "R") {
 					state = 2;
 					break;
 				}
 				
-				if(userinput == "L")
-				{
+				if(userinput == "L") {
 					state = 11;
 					break;
 				}
@@ -55,22 +51,18 @@ int main() {
 				cin >> userinput;
 				valid = true;
 				
-				for(i = 0; i < userinput.length() ;i++)
-				{
-					if(!isdigit(userinput[i]) || userinput.length() != 7)
-					{
+				for(i = 0; i < userinput.length() ;i++) {
+					if(!isdigit(userinput[i]) || userinput.length() != 7) {
 						valid = false;
 					}
 				}
 				
-				if(valid == true)
-				{
+				if(valid == true) {
 					state = 3;
 					break;
 				}
 				
-				if(valid == false)
-				{
+				if(valid == false) {
 					cout << "Invalid account #, try again!" << endl;
 					state = 2;
 					break;
@@ -79,16 +71,13 @@ int main() {
 				
 			case 3: // CheckAcctExists
 		
-		/*	for (iter = Accounts.begin(); iter < Accounts.end(); iter++)
-       		 {
-       		 	if(*iter.getaccountNumber() == (int)userinput)
-					{
+		/*	for (iter = Accounts.begin(); iter < Accounts.end(); iter++) {
+       		 	if(*iter.getaccountNumber() == (int)userinput) {
 					  valid = false;	
 					}	
 			 }
 			 
-			 if(valid == true)
-			 {
+			 if(valid == true) {
 			 	User temp = new User;
 			 	temp.getaccountNumber() = (int)userinput;
 			 	cout << temp.getaccountNumber() << endl;
