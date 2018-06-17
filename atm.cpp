@@ -6,7 +6,10 @@
 #include <iterator>
 #include <vector>
 
+
 using namespace std;
+bool validateAccountNumber(string acctNumber);
+
 int main() {
 	
 	int state = 0;
@@ -49,20 +52,15 @@ int main() {
 			case 2:
 				cout << "Please enter your desired account number, must be 7 numbers only" << endl;
 				cin >> userinput;
-				valid = true;
 				
-				for(i = 0; i < userinput.length() ;i++) {
-					if(!isdigit(userinput[i]) || userinput.length() != 7) {
-						valid = false;
-					}
-				}
+                bool validAcct = validateAccountNumber(userinput);
 				
-				if(valid == true) {
+				if(validAcct == true) {
 					state = 3;
 					break;
 				}
 				
-				if(valid == false) {
+				if(validAcct == false) {
 					cout << "Invalid account #, try again!" << endl;
 					state = 2;
 					break;
@@ -96,4 +94,16 @@ int main() {
 		}
 	}
     return 0;
+}
+
+bool validateAccountNumber(string acctNumber) {
+    if(acctNumber.length() != 7)
+        return false;
+    
+    for(int i = 0; i < userinput.length(); i++) {
+        if(!isdigit(acctNumber[i])) {
+            return false
+        }
+    }
+    return true;
 }

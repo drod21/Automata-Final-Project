@@ -13,18 +13,27 @@ using namespace std;
 
 class User {
     private:
-    int accountNumber;
-    int pin;
+    string accountNumber;
+    string pin;
     double checkingAmount;
     double savingsAmount;
     
     public:
     // generates new user
-    User(int accountNumber, int pin, double savingsAmount, double checkingAmount) {
+    User(string accountNumber, string pin, double savingsAmount, double checkingAmount) {
         this->accountNumber = accountNumber;
         this->pin = pin;
         this->savingsAmount = savingsAmount;
         this->checkingAmount = checkingAmount;
+    }
+    
+    User(string accountNumber, string pin) {
+        bool validAccount = validateAccountNumber(accountNumber);
+        bool pinValid = (pin.length() == 4);
+        if(validAccount && pinValid) {
+            this->accountNumber = accountNumber;
+            this->pin = pin;
+        }
     }
     
     User() {
@@ -89,7 +98,18 @@ class User {
         return (withdrawAmount >= 10 && withdrawAmount <= 500) ? true : false;
     }
     
-    bool validatePIN(int pin) {
+    bool validateAccountNumber(string accountNumber) {
+        if(accountNumber.length() != 7)
+            return false;
+        for(int i = 0; i < userinput.length(); i++) {
+            if(!isdigit(accountNumber[i])) {
+                return false
+            }
+        }
+        return true;
+    }
+    
+    bool validatePIN(string pin) {
         return (pin == this->pin) ? true : false;
     }
     
@@ -101,11 +121,11 @@ class User {
         cout << "Remaining savings account balance: " << this->savingsAmount << "." << endl;
     }
     
-    int getaccountNumber() {
+    string getaccountNumber() {
     	return accountNumber;
 	}
     
-    int getPin() {
+    string getPin() {
         return pin;
     }
     
@@ -125,11 +145,11 @@ class User {
         this->savingsAmount = savingsAmount;
     }
     
-    void setPin(int pin) {
+    void setPin(string pin) {
         this->pin = pin;
     }
     
-    void setAccountNumber(int acctNumber) {
+    void setAccountNumber(string acctNumber) {
         this->accountNumber = acctNumber;
     }
     
