@@ -3,9 +3,9 @@
 #include "User.h"
 #include <iostream>
 #include <string>
-#include <iterator>
+// #include <iterator>
 #include <vector>
-#include <sstream>
+// #include <sstream>
 
 using namespace std;
 bool validateAccountNumber(string acctNumber);
@@ -103,7 +103,7 @@ int main() {
 				
 				
 				Accounts.push_back(*temp); // AFTER PIN is valid
-				state = 1
+				state = 1;
 				break;
 				
 			case 11: // Login
