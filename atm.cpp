@@ -9,6 +9,7 @@
 
 using namespace std;
 bool validateAccountNumber(string acctNumber);
+bool validatePin(string pin);
 
 int main() {
 	
