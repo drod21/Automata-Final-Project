@@ -29,7 +29,8 @@ class User {
     
     User(string accountNumber, string pin) {
         bool validAccount = validateAccountNumber(accountNumber);
-        bool pinValid = (pin.length() == 4);
+        bool pinValid = validatePin(pin);
+        
         if(validAccount && pinValid) {
             this->accountNumber = accountNumber;
             this->pin = pin;
@@ -109,7 +110,20 @@ class User {
         return true;
     }
     
-    bool validatePIN(string pin) {
+    bool validatePin(string pin) {
+        if(pin.length() != 4)
+            return false;
+        
+        for(int i = 0; i < pin.length(); i++) {
+            if(!isdigit(pin[i])) {
+                return false;
+            }
+        }
+        
+        return true;
+    }
+    
+    bool authenticatePIN(string pin) {
         return (pin == this->pin) ? true : false;
     }
     
