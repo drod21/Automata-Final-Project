@@ -5,7 +5,7 @@
 #include <string>
 #include <iterator>
 #include <vector>
-
+#include <sstream>
 
 using namespace std;
 bool validateAccountNumber(string acctNumber);
@@ -17,9 +17,10 @@ int main() {
 	int i;
 	int accountnum;
 	int pin;
-	bool valid = true;
+	bool validAcct = true;
+	User *temp;
 	vector<User> Accounts;
-	vector<User>::iterator iter;
+	
 	
 	while(true) {
 		switch(state) {
@@ -49,44 +50,62 @@ int main() {
 				break;
 				
 				
-			case 2:
+			case 2: // Register (Ask ACCT #, checks if 7 numbers only)
 				cout << "Please enter your desired account number, must be 7 numbers only" << endl;
 				cin >> userinput;
 				
-                bool validAcct = validateAccountNumber(userinput);
+                 validAcct = validateAccountNumber(userinput);
 				
-				if(validAcct == true) {
+				if(validAcct) {
 					state = 3;
 					break;
 				}
 				
-				if(validAcct == false) {
+				if(!validAcct) {
 					cout << "Invalid account #, try again!" << endl;
 					state = 2;
+					validAcct = true;
 					break;
 				}
-				
-				
-			case 3: // CheckAcctExists
 		
-		/*	for (iter = Accounts.begin(); iter < Accounts.end(); iter++) {
-       		 	if(*iter.getaccountNumber() == (int)userinput) {
-					  valid = false;	
+				
+			case 3: // Register (Checks if acct exists)
+			cout << "LIST OF USERS" << endl;
+			for (i = 0; i < Accounts.size(); i++) {
+				string checker = Accounts[i].getaccountNumber();
+				
+				cout << checker << endl;
+				cout << Accounts[i].getCheckingAmount() << endl;
+       		 	if(!checker.compare(userinput)) {
+					  validAcct = false;	
 					}	
 			 }
 			 
-			 if(valid == true) {
-			 	User temp = new User;
-			 	temp.getaccountNumber() = (int)userinput;
-			 	cout << temp.getaccountNumber() << endl;
+			 if(validAcct) {
+			 	temp = new User;
+			 	temp->setAccountNumber(userinput);
+			 	cout << temp->getaccountNumber() << endl; // TEMP, TO CHECK USER LIST AS BEING BUILT
 			 	state = 4;
 			 	break;
 			 }
 			
-			*/
-			cout << "valid test" << endl;
-			state = 1;
-			break;
+			if(!validAcct)
+			{
+				cout << "Account already exists! Try again" << endl;
+				state = 2;
+				break;
+			}
+			
+			
+			case 4: // REQUEST + VALIDATE PIN before creating user
+				cout << "ACCT CREATED!" << endl;
+				
+				
+				
+				Accounts.push_back(*temp); // AFTER PIN is valid
+				state = 1
+				break;
+				
 			case 11: // Login
 				cout << "OPTION NOT YET AVAILABLE, PLEASE TRY AGAIN LATER." << endl;
 				state = 0;
@@ -100,9 +119,9 @@ bool validateAccountNumber(string acctNumber) {
     if(acctNumber.length() != 7)
         return false;
     
-    for(int i = 0; i < userinput.length(); i++) {
+    for(int i = 0; i < acctNumber.length(); i++) {
         if(!isdigit(acctNumber[i])) {
-            return false
+            return false;
         }
     }
     return true;

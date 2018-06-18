@@ -81,12 +81,12 @@ class User {
     
     string transferMoney(string toAccount, double transferAmount) {
         string success = "Successful transfer to " + toAccount + " account.";
-        if (toAccount == "checking" && this.savingsAmount >= transferAmount) {
+        if (toAccount == "checking" && this->savingsAmount >= transferAmount) {
             this->savingsAmount -= transferAmount;
             this->checkingAmount += transferAmount;
         }
         
-        if (toAccount == "savings" && this.checkingAmount >= transferAmount) {
+        if (toAccount == "savings" && this->checkingAmount >= transferAmount) {
             this->checkingAmount -= transferAmount;
             this->savingsAmount += transferAmount;
         }
@@ -101,9 +101,9 @@ class User {
     bool validateAccountNumber(string accountNumber) {
         if(accountNumber.length() != 7)
             return false;
-        for(int i = 0; i < userinput.length(); i++) {
+        for(int i = 0; i < accountNumber.length(); i++) {
             if(!isdigit(accountNumber[i])) {
-                return false
+                return false;
             }
         }
         return true;
