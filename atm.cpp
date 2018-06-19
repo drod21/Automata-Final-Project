@@ -123,7 +123,7 @@ int main() {
             case 13: //state for account options
                 cout << "Please input your 4 digit PIN number." << endl;
                 cin >> pin;
-                if(!Accounts[acctIndex].getPin().compare(pin))
+                if (Accounts[acctIndex].getPin() == pin)
                     state = 15;
                 else
                     state = 14;
@@ -140,7 +140,7 @@ int main() {
 // returns the index of the account
 int findAccount(vector<User> accounts, string accountNum) {
     for(int i = 0; i < accounts.size(); i++) {
-        if (!accounts[i].getaccountNumber().compare(accountNum))
+        if (accounts[i].getaccountNumber() == accountNum)
             return i;
     }
     return -1;
