@@ -23,7 +23,7 @@ int main() {
     int acctIndex;
 	User *temp;
 	vector<User> Accounts;
-	
+    int count = 0;
 	
 	while(true) {
 		switch(state) {
@@ -123,15 +123,23 @@ int main() {
             case 13: //state for account options
                 cout << "Please input your 4 digit PIN number." << endl;
                 cin >> pin;
-                if (Accounts[acctIndex].getPin() == pin)
-                    state = 15;
-                else
+                
+                if(Accounts[acctIndex] != pin && count < 2) {
                     state = 14;
+                } else if(count == 2) {
+                    state = 26; // Locked state;
+                } else {
+                    state = 15;
+                }
                     
                 break;
             case 14:
                 cout << "Invalid PIN. Please try again." << endl;
                 state = 13;
+                count++;
+                break;
+            case 15:
+                cout << "Loggined in menu goes here" << endl;
                 break;
 		}
 	}
