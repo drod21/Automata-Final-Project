@@ -124,7 +124,7 @@ int main() {
                 cout << "Please input your 4 digit PIN number." << endl;
                 cin >> pin;
                 
-                if(Accounts[acctIndex] != pin && count < 2) {
+                if(Accounts[acctIndex].getPin() != pin && count < 2) {
                     state = 14;
                 } else if(count == 2) {
                     state = 26; // Locked state;
