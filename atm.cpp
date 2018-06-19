@@ -10,6 +10,7 @@
 using namespace std;
 bool validateAccountNumber(string acctNumber);
 bool validatePin(string pin);
+int findAccount(vector<User> accounts, string accountNum);
 
 int main() {
 	
@@ -89,12 +90,12 @@ int main() {
                 cout << "Please enter your desired PIN." << endl;
                 cin >> pin;
                 
-                if (!validatePin) {
+                if (!validatePin(pin)) {
                     cout << "Invalid PIN, please try again." << endl;
-                    state = 2;
+                    state = 4;
                 } else {
                     temp->setPin(pin);
-                    state = 4;
+                    state = 5;
                 }
                 break;
                 
@@ -122,7 +123,7 @@ int main() {
             case 13: //state for account options
                 cout << "Please input your 4 digit PIN number." << endl;
                 cin >> pin;
-                if(Accounts[acctIndex] == pin)
+                if(!Accounts[acctIndex].getPin().compare(pin))
                     state = 15;
                 else
                     state = 14;
@@ -139,7 +140,7 @@ int main() {
 // returns the index of the account
 int findAccount(vector<User> accounts, string accountNum) {
     for(int i = 0; i < accounts.size(); i++) {
-        if (accounts[i].getAccountNumber() == accountNum)
+        if (!accounts[i].getaccountNumber().compare(accountNum))
             return i;
     }
     return -1;
