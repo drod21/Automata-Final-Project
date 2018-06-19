@@ -16,9 +16,10 @@ int main() {
 	int state = 0;
 	string userinput;
 	int i;
-	string accountnum;
+	string accountNum;
 	string pin;
 	bool validAcct = true;
+    int acctIndex;
 	User *temp;
 	vector<User> Accounts;
 	
@@ -70,30 +71,19 @@ int main() {
                 
 			case 3: // Register (Checks if acct exists)
 			cout << "LIST OF USERS" << endl;
-			for (i = 0; i < Accounts.size(); i++) {
-				string checker = Accounts[i].getaccountNumber();
-				
-				cout << checker << endl;
-				cout << Accounts[i].getCheckingAmount() << endl;
-       		 	if(!checker.compare(userinput)) {
-					  validAcct = false;	
-					}	
-			 }
-			 
-			 if(validAcct) {
-			 	temp = new User;
-			 	temp->setAccountNumber(userinput);
-			 	cout << temp->getaccountNumber() << endl; // TEMP, TO CHECK USER LIST AS BEING BUILT
-			 	state = 4;
-			 	break;
-			 }
-			
-			if(!validAcct) {
-				cout << "Account already exists! Try again" << endl;
-				state = 2;
-				break;
-			}
+                acctIndex = findAccount(Accounts, userinput);
                 
+                if(acctIndex == -1) {
+                    temp = new User;
+                    temp->setAccountNumber(userinput);
+                    cout << temp->getaccountNumber() << endl; // TEMP, TO CHECK USER LIST AS BEING BUILT
+                    state = 4;
+                } else {
+                    cout << "Account already exists! Try again" << endl;
+                    state = 2;
+                }
+			
+                break;
 			
             case 4: // Enter/validate pin
                 cout << "Please enter your desired PIN." << endl;
@@ -114,15 +104,45 @@ int main() {
                 Accounts.push_back(*temp); // AFTER PIN is valid
                 state = 1;
                 break;
-				
+            
 			case 11: // Login
 				cout << "OPTION NOT YET AVAILABLE, PLEASE TRY AGAIN LATER." << endl;
                 cout << "Please enter your 7 digit account number." << endl;
-				state = 0;
+                cin >> accountNum;
+                acctIndex = findAccount(Accounts, accountNum);
+                if (acctIndex >= 0)
+                    state = 13;
+                else
+                    state = 12;
 				break;
+            case 12: // reset state for login
+                cout << "Invalid account number, please try again." << endl;
+                state = 11;
+                break;
+            case 13: //state for account options
+                cout << "Please input your 4 digit PIN number." << endl;
+                cin >> pin;
+                if(Accounts[acctIndex] == pin)
+                    state = 15;
+                else
+                    state = 14;
+                    
+                break;
+            case 14:
+                cout << "Invalid PIN. Please try again." << endl;
+                state = 13;
+                break;
 		}
 	}
     return 0;
+}
+// returns the index of the account
+int findAccount(vector<User> accounts, string accountNum) {
+    for(int i = 0; i < accounts.size(); i++) {
+        if (accounts[i].getAccountNumber() == accountNum)
+            return i;
+    }
+    return -1;
 }
 
 bool validatePin(string pin) {
