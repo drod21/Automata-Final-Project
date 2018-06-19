@@ -103,6 +103,8 @@ int main() {
                 cout << "ACCT CREATED!" << endl;
                 
                 Accounts.push_back(*temp); // AFTER PIN is valid
+                cout << Accounts[0].getaccountNumber() << endl;
+                cout << Accounts[0].getPin() << endl;
                 state = 1;
                 break;
             
@@ -139,7 +141,7 @@ int main() {
                 count++;
                 break;
             case 15:
-                cout << "Loggined in menu goes here" << endl;
+                cout << "Logged in menu goes here" << endl;
                 break;
 		}
 	}
