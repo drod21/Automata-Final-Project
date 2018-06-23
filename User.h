@@ -6,6 +6,7 @@
 //
 #include <iostream>
 #include <string>
+#include <time.h>
 #ifndef User_h
 #define User_h
 
@@ -17,6 +18,7 @@ class User {
     string pin;
     double checkingAmount;
     double savingsAmount;
+    time_t lockouttimer;
     
     
     public:
@@ -41,6 +43,7 @@ class User {
     User() {
         savingsAmount = 0;
         checkingAmount = 0;
+        lockouttimer = 0;
     }
     
     string withdrawal(double withdrawAmount, string account) {
@@ -168,5 +171,14 @@ class User {
         this->accountNumber = acctNumber;
     }
     
+    time_t getTimerLockout()
+    {
+    	return this->lockouttimer;
+	}
+	
+	void setTimerLockout()
+	{
+		time(&lockouttimer);
+	}
 };
 #endif /* User_h */

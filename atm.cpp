@@ -3,9 +3,9 @@
 #include "User.h"
 #include <iostream>
 #include <string>
-// #include <iterator>
+#include <time.h>
 #include <vector>
-// #include <sstream>
+
 
 using namespace std;
 bool validateAccountNumber(string acctNumber);
@@ -25,6 +25,8 @@ int main() {
 	vector<User> Accounts;
     int count = 0;
     double usernumberinput;
+    double difference;
+    time_t curtime;
     
     User ATM;
     ATM.setCheckingAmount(500);
@@ -132,24 +134,40 @@ int main() {
                 cout << "Invalid account number, please try again." << endl;
                 state = 11;
                 break;
-            case 13: //state for account options
-                cout << "Please input your 4 digit PIN number." << endl;
-                cin >> pin;
                 
-                if(Accounts[acctIndex].getPin() != pin && count < 2) {
-                    state = 14;
-                } else if(count == 2) {
-                    state = 26; // Locked state;
-                } else {
-                    state = 15;
-                }
+            case 13: //state for account options
+            	time(&curtime);
+            	cout << curtime << endl;
+            	 difference = difftime(curtime,Accounts[acctIndex].getTimerLockout());
+            	if(difference >= 30)
+            	{
+	            	cout << "Please input your 4 digit PIN number." << endl;
+	                cin >> pin;
+	                
+	                if(Accounts[acctIndex].getPin() != pin && count < 2) {
+	                    state = 14;
+	                } else if(count == 2) {
+	                    state = 26; // Locked state;
+	                } else {
+	                    state = 15;
+	                }	
+				}
+				else
+				{
+					cout << "Account locked for " << 30 - difference << " more seconds." <<endl;
+					state = 1;
+					break;
+				}
+                
                     
                 break;
+                
             case 14:
-                cout << "Invalid PIN. Please try again." << endl;
                 state = 13;
                 count++;
+                cout << "Invalid PIN. " << 3-count << " Attempts remaining, Please try again." << endl;
                 break;
+                
             case 15:
                 cout << "Please select an option; W: Withdraw | D: Deposit | B: Account Balance" << endl;
                 cin >> userinput;
@@ -362,8 +380,9 @@ int main() {
 			break;
 			
 			case 26: // locked state (NEEDS COMPLETED) 
-			cout << "LOCKED OUT" << endl;
+			cout << "LOCKED OUT FOR 30 SECONDS" << endl;
 			count = 0;
+			Accounts[acctIndex].setTimerLockout();
 			state = 1; //Back to main menu
 			break;
 		}
@@ -403,3 +422,4 @@ bool validateAccountNumber(string acctNumber) {
     }
     return true;
 }
+
