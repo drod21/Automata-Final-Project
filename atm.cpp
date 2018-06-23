@@ -24,6 +24,11 @@ int main() {
 	User *temp;
 	vector<User> Accounts;
     int count = 0;
+    double usernumberinput;
+    
+    User ATM;
+    ATM.setCheckingAmount(500);
+    cout << ATM.getCheckingAmount() << endl; // TEMP (STARTING AMOUNT IN ATM)
 	
 	while(true) {
 		switch(state) {
@@ -77,7 +82,7 @@ int main() {
                 if(acctIndex == -1) {
                     temp = new User;
                     temp->setAccountNumber(userinput);
-                    cout << temp->getaccountNumber() << endl; // TEMP, TO CHECK USER LIST AS BEING BUILT
+                    cout << temp->getaccountNumber() << endl; // TEMP, TO CHECK USER LIST AS BEING BUILT 
                     state = 4;
                 } else {
                     cout << "Account already exists! Try again" << endl;
@@ -95,6 +100,8 @@ int main() {
                     state = 4;
                 } else {
                     temp->setPin(pin);
+                    temp->setCheckingAmount(400); // TEMP, GIVING STARTING BALANCE TO TEST WITHDRAW + DEPOSIT
+                    temp->setSavingsAmount(400); // TEMP, GIVING STARTING BALANCE TO TEST WITHDRAW + DEPOSIT
                     state = 5;
                 }
                 break;
@@ -103,13 +110,16 @@ int main() {
                 cout << "ACCT CREATED!" << endl;
                 
                 Accounts.push_back(*temp); // AFTER PIN is valid
-                cout << Accounts[0].getaccountNumber() << endl;
-                cout << Accounts[0].getPin() << endl;
+                for(i = 0; i < Accounts.size(); i++) // TEMP, JUST MAKING SURE USERS ARE BEING ADDED TO LIST CORRECTLY
+				{
+                	cout << Accounts[i].getaccountNumber() << endl;
+                	cout << Accounts[i].getPin() << endl;
+				}
+                
                 state = 1;
                 break;
             
 			case 11: // Login
-				cout << "OPTION NOT YET AVAILABLE, PLEASE TRY AGAIN LATER." << endl;
                 cout << "Please enter your 7 digit account number." << endl;
                 cin >> accountNum;
                 acctIndex = findAccount(Accounts, accountNum);
@@ -141,8 +151,107 @@ int main() {
                 count++;
                 break;
             case 15:
-                cout << "Logged in menu goes here" << endl;
+                cout << "Please select an option; W: Withdraw | D: Deposit | B: Account Balance" << endl;
+                cin >> userinput;
+                if(userinput == "W")
+            	{
+            		state = 16;
+            		break;
+				}
+				
+				if(userinput == "D")
+				{
+					state = 17;
+					break;
+				}
+				
+				if(userinput == "B")
+				{
+					state = 18;
+					break;
+				}
+				
+				cout << "Invalid Option! Please try again." << endl;
+				state = 15;
                 break;
+                
+			case 16: // Withdraw
+			cout << "What account would you like to withdraw from? C: Checking | S: Savings" << endl;
+			cin >> userinput;
+			
+			if(userinput == "C")
+			{
+				state = 161;
+				break;
+			}
+			
+			if(userinput == "S")
+			{
+				state = 162;
+				break;
+			}
+			
+			cout << "Invalid option, please try again!" << endl;
+			state = 16;
+			break;
+			
+			
+			case 161: // Withdraw-Checking
+			cout << "How much would you like to withdraw? MIN: $10 | MAX: $500" << endl;
+			cin >> usernumberinput;
+			
+			if(Accounts[acctIndex].withdrawAmountValid(usernumberinput))
+			{
+				if(usernumberinput > Accounts[acctIndex].getCheckingAmount())
+				{
+					cout << "Insufficient funds: Try again" << endl;
+					state = 161;
+					break;
+				}
+				else
+				{
+					if (usernumberinput > ATM.getCheckingAmount())
+					{
+						cout << "Sorry, the ATM does not currently have sufficient funds" << endl;
+						state = 161;
+					}
+					else
+					{
+						cout << "Withdrawing " << usernumberinput << " dollars from checking account." << endl;
+						Accounts[acctIndex].setCheckingAmount(Accounts[acctIndex].getCheckingAmount() - usernumberinput);
+						ATM.setCheckingAmount(ATM.getCheckingAmount() - usernumberinput);
+						
+						cout << Accounts[acctIndex].getCheckingAmount() << endl; // TEMP TO SEE ACCOUNTS CHECKING BALANCE AFTER
+						cout << ATM.getCheckingAmount() << endl; // TEMP TO SEE ATM CHECKING BALANCE AFTER
+						state = 15;
+						break;
+					}
+				}
+				break;
+			}
+			else
+			{
+				cout << "Invalid withdraw amount, please try again!" << endl;
+				state = 161;
+				break;
+			}
+			
+			break;
+			
+			case 162: // Withdraw-Savings
+			break;
+			
+			case 17: // Deposit
+			break;
+			
+			case 18: // Account Balance
+			break;
+			
+			case 26: // locked state (NEEDS COMPLETED) 
+			cout << "LOCKED OUT" << endl;
+			count = 0;
+			state = 1; //Back to main menu
+			break;
 		}
 	}
     return 0;

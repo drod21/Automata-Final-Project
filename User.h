@@ -18,6 +18,7 @@ class User {
     double checkingAmount;
     double savingsAmount;
     
+    
     public:
     // generates new user
     User(string accountNumber, string pin, double savingsAmount, double checkingAmount) {
