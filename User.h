@@ -20,7 +20,6 @@ class User {
     double savingsAmount;
     time_t lockouttimer;
     
-    
     public:
     // generates new user
     User(string accountNumber, string pin, double savingsAmount, double checkingAmount) {
@@ -171,13 +170,11 @@ class User {
         this->accountNumber = acctNumber;
     }
     
-    time_t getTimerLockout()
-    {
+    time_t getTimerLockout() {
     	return this->lockouttimer;
 	}
 	
-	void setTimerLockout()
-	{
+	void setTimerLockout() {
 		time(&lockouttimer);
 	}
 };
