@@ -80,7 +80,7 @@ int main() {
                 break;
                 
 			case 3: // Register (Checks if acct exists)
-			cout << "LIST OF USERS" << endl;
+                cout << "LIST OF USERS" << endl;
                 acctIndex = findAccount(Accounts, userinput);
                 
                 if(acctIndex == -1) {
@@ -190,22 +190,22 @@ int main() {
                 break;
                 
 			case 16: // Withdraw
-			cout << "What account would you like to withdraw from? C: Checking | S: Savings" << endl;
-			cin >> userinput;
-			
-			if(userinput == "C") {
-				state = 161;
-				break;
-			}
-			
-			if(userinput == "S") {
-				state = 162;
-				break;
-			}
-			
-			cout << "Invalid option, please try again!" << endl;
-			state = 16;
-			break;
+                cout << "What account would you like to withdraw from? C: Checking | S: Savings" << endl;
+                cin >> userinput;
+                
+                if(userinput == "C") {
+                    state = 161;
+                    break;
+                }
+                
+                if(userinput == "S") {
+                    state = 162;
+                    break;
+                }
+                
+                cout << "Invalid option, please try again!" << endl;
+                state = 16;
+                break;
 			
 			
 			case 161: // Withdraw-Checking
