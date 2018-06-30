@@ -63,8 +63,14 @@ int main() {
 				
 				
 			case 2: // Register (Ask ACCT #, checks if 7 numbers only)
-				cout << "Please enter your desired account number, must be 7 numbers only" << endl;
+				cout << "Please enter your desired account number, must be 7 numbers only. | Q: Quit" << endl;
 				cin >> userinput;
+				
+				if(userinput == "Q")
+				{
+					state = 0;
+					break;
+				}
 				
                  validAcct = validateAccountNumber(userinput);
 				
@@ -96,8 +102,20 @@ int main() {
                 break;
 			
             case 4: // Enter/validate pin
-                cout << "Please enter your desired PIN." << endl;
+                cout << "Please enter your desired PIN. | Q: Quit | B: Back" << endl;
                 cin >> pin;
+                
+                if(pin == "Q")
+                {
+                	state = 0;
+                	break;
+				}
+				
+				if(pin == "B")
+				{
+					state = 2;
+					break;
+				}
                 
                 if (!validatePin(pin)) {
                     cout << "Invalid PIN, please try again." << endl;
@@ -124,8 +142,15 @@ int main() {
                 break;
             
 			case 11: // Login
-                cout << "Please enter your 7 digit account number." << endl;
+                cout << "Please enter your 7 digit account number. | Q: quit" << endl;
                 cin >> accountNum;
+                
+                if(accountNum == "Q")
+                {
+                	state = 0;
+                	break;
+				}
+                
                 acctIndex = findAccount(Accounts, accountNum);
                 if (acctIndex >= 0)
                     state = 13;
@@ -139,7 +164,6 @@ int main() {
                 
             case 13: //state for account options
             	time(&curtime);
-            	cout << curtime << endl;
             	 difference = difftime(curtime,Accounts[acctIndex].getTimerLockout());
             	if(difference >= 30) {
 	            	cout << "Please input your 4 digit PIN number." << endl;
@@ -168,8 +192,15 @@ int main() {
                 break;
                 
             case 15:
-                cout << "Please select an option; W: Withdraw | D: Deposit | B: Account Balance" << endl;
+                cout << "Please select an option; W: Withdraw | D: Deposit | B: Account Balance | Q: Quit" << endl;
                 cin >> userinput;
+                
+                if(userinput == "Q")
+                {
+                	state = 0;
+                	break;
+				}
+                
                 if(userinput == "W") {
             		state = 16;
             		break;
@@ -190,8 +221,20 @@ int main() {
                 break;
                 
 			case 16: // Withdraw
-                cout << "What account would you like to withdraw from? C: Checking | S: Savings" << endl;
+                cout << "What account would you like to withdraw from? C: Checking | S: Savings | Q: Quit | B: Back" << endl;
                 cin >> userinput;
+                
+                if(userinput == "Q")
+                {
+                	state = 0;
+                	break;
+				}
+				
+				if(userinput == "B")
+                {
+                	state = 15;
+                	break;
+				}
                 
                 if(userinput == "C") {
                     state = 161;
@@ -209,20 +252,38 @@ int main() {
 			
 			
 			case 161: // Withdraw-Checking
-                cout << "How much would you like to withdraw? MIN: $10 | MAX: $500" << endl;
+                cout << "How much would you like to withdraw? MIN: $10 | MAX: $500 | 0: Quit | 1: Back" << endl;
                 cin >> usernumberinput;
+                
+                if(usernumberinput == 0)
+                {
+                	state = 0;
+                	break;
+				}
+				
+				if(usernumberinput == 1)
+                {
+                	state = 16;
+                	break;
+				}
                 
                 if (usernumberinput > ATM.getCheckingAmount()) {
                     cout << "Sorry, the ATM does not currently have sufficient funds" << endl;
                     state = 161;
+                    break;
                 }
                 
                 if(Accounts[acctIndex].withdrawAmountValid(usernumberinput)) {
                     message = Accounts[acctIndex].withdrawFromChecking(usernumberinput);
                     if(message == "Insufficient funds")
-                        state = 161;
+                    {
+                    	cout << message << endl;
+                    	state = 161;
+                        break;	
+					}   
                     else
                         state = 15;
+                        ATM.withdrawFromChecking(usernumberinput);
                     cout << Accounts[acctIndex].getCheckingAmount() << endl; // TEMP TO SEE ACCOUNTS CHECKING BALANCE AFTER
                     cout << ATM.getCheckingAmount() << endl; // TEMP TO SEE ATM CHECKING BALANCE AFTER
                     state = 15;
@@ -240,22 +301,41 @@ int main() {
                 break;
 			
 			case 162: // Withdraw-Savings
-                cout << "How much would you like to withdraw? MIN: $10 | MAX: $500" << endl;
+                cout << "How much would you like to withdraw? MIN: $10 | MAX: $500 | 0: Quit | 1: Back" << endl;
                 cin >> usernumberinput;
+                
+                
+                 if(usernumberinput == 0)
+                {
+                	state = 0;
+                	break;
+				}
+				
+				if(usernumberinput == 1)
+                {
+                	state = 16;
+                	break;
+				}
                 
                 if (usernumberinput > ATM.getCheckingAmount()) {
                     cout << "Sorry, the ATM does not currently have sufficient funds" << endl;
                     state = 162;
+                    break;
                 }
                 
                 
                 if(Accounts[acctIndex].withdrawAmountValid(usernumberinput)) {
                     message = Accounts[acctIndex].withdrawFromSavings(usernumberinput);
                     if(message == "Insufficient funds")
-                        state = 162;
+                    {
+                    	cout << message << endl;
+                    	state = 162;
+                        break;
+					}   
                     else
-                        state = 15;
-                    cout << Accounts[acctIndex].getCheckingAmount() << endl; // TEMP TO SEE ACCOUNTS CHECKING BALANCE AFTER
+                    state = 15;
+                    ATM.withdrawFromChecking(usernumberinput);
+                    cout << Accounts[acctIndex].getSavingsAmount() << endl; // TEMP TO SEE ACCOUNTS CHECKING BALANCE AFTER
                     cout << ATM.getCheckingAmount() << endl; // TEMP TO SEE ATM CHECKING BALANCE AFTER
                 } else {
                     cout << "Invalid withdraw amount, please try again!" << endl;
@@ -264,8 +344,20 @@ int main() {
                 
                 break;
 			case 17: // Deposit
-                cout << "What account would you like to deposit to? C: Checking | S: Savings" << endl;
+                cout << "What account would you like to deposit to? C: Checking | S: Savings | Q: Quit | B: Back" << endl;
                 cin >> userinput;
+                
+                if(userinput == "Q")
+                {
+                	state = 0;
+                	break;
+				}
+				
+				if(userinput == "B")
+                {
+                	state = 15;
+                	break;
+				}
                 
                 if(userinput == "C") {
                     state = 171;
@@ -279,8 +371,21 @@ int main() {
 			
 			
 			case 171: // Deposit-Checking
-                cout << "Enter the amount you would like to deposit?" << endl;
+                cout << "Enter the amount you would like to deposit? | 0: Quit | 1: Back" << endl;
                 cin >> usernumberinput;
+                
+                
+                if(usernumberinput == 0)
+                {
+                	state = 0;
+                	break;
+				}
+				
+				if(usernumberinput == 1)
+                {
+                	state = 17;
+                	break;
+				}
                 
                 cout << "Depositing " << usernumberinput << " into checking account" << endl;
                 Accounts[acctIndex].depositToChecking(usernumberinput);
@@ -292,8 +397,20 @@ int main() {
                 break;
 			
 			case 172: // Deposit-Savings
-                cout << "Enter the amount you would like to deposit?" << endl;
+                cout << "Enter the amount you would like to deposit? | 0: Quit | 1: Back" << endl;
                 cin >> usernumberinput;
+                
+                if(usernumberinput == 0)
+                {
+                	state = 0;
+                	break;
+				}
+				
+				if(usernumberinput == 1)
+                {
+                	state = 17;
+                	break;
+				}
                 
                 cout << "Depositing " << usernumberinput << " into savings account" << endl;
                 Accounts[acctIndex].depositToSavings(usernumberinput);
@@ -305,8 +422,19 @@ int main() {
                 break;
 			
 			case 18: // Account Balance
-                cout << "What account balance would you like to see? C: Checking | S: Savings" << endl;
+                cout << "What account balance would you like to see? C: Checking | S: Savings | Q: Quit | B: Back" << endl;
                 cin >> userinput;
+                
+                 if(userinput == "Q")
+                 {
+                 	state = 0;
+                 	break;
+				 }
+				 if(userinput == "B")
+				 {
+				 	state = 15;
+				 	break;
+				 }
                 
                 if(userinput == "C") {
                     state = 181;
