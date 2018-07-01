@@ -134,12 +134,12 @@ public:
         return (pin == this->pin) ? true : false;
     }
     
-    void printCheckingInfo() {
-        cout << "Remaining checking account balance: " << this->checkingAmount << "." << endl;
+    void printCheckingAmount() {
+        cout << "Checking account balance: $" << this->checkingAmount << "." << endl;
     }
     
     void printSavingsAmount() {
-        cout << "Remaining savings account balance: " << this->savingsAmount << "." << endl;
+        cout << "Savings account balance: $" << this->savingsAmount << "." << endl;
     }
     
     string getaccountNumber() {
