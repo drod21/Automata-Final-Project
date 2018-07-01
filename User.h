@@ -27,16 +27,12 @@ public:
         this->pin = pin;
         this->savingsAmount = savingsAmount;
         this->checkingAmount = checkingAmount;
+        this->lockouttimer = 0;
     }
     
     User(string accountNumber, string pin) {
-        bool validAccount = validateAccountNumber(accountNumber);
-        bool pinValid = validatePin(pin);
-        
-        if(validAccount && pinValid) {
-            this->accountNumber = accountNumber;
-            this->pin = pin;
-        }
+        this->accountNumber = accountNumber;
+        this->pin = pin;
     }
     
     User() {
@@ -46,10 +42,7 @@ public:
     }
     
     string withdrawal(double withdrawAmount, string account) {
-        if (account == "checking")
-            return withdrawFromChecking(withdrawAmount);
-        else
-            return withdrawFromSavings(withdrawAmount);
+        return (account == "checking") ? withdrawFromChecking(withdrawAmount) : withdrawFromSavings(withdrawAmount);
     }
     
     string withdrawFromChecking(double withdrawAmount) {
@@ -66,6 +59,7 @@ public:
     string withdrawFromSavings(double withdrawAmount) {
         string success = "Successful withdrawal";
         string error = "Insufficient funds";
+        
         if (!sufficientFunds(withdrawAmount, "savings"))
             return error;
         
@@ -85,6 +79,7 @@ public:
     
     string transferMoney(string toAccount, double transferAmount) {
         string success = "Successful transfer to " + toAccount + " account.";
+        
         if (toAccount == "checking" && this->savingsAmount >= transferAmount) {
             this->savingsAmount -= transferAmount;
             this->checkingAmount += transferAmount;

@@ -59,14 +59,14 @@ int main() {
                 break;
             case 2: // Register (Ask ACCT #, checks if 7 numbers only)
                 cout << "Please enter your desired account number, must be 7 numbers only. | Q: Quit" << endl;
-                cin >> userinput;
+                cin >> accountNum;
                 
                 if(userinput == "Q") {
                     state = 0;
                     break;
                 }
                 
-                validAcct = validateAccountNumber(userinput);
+                validAcct = validateAccountNumber(accountNum);
                 state = (validAcct) ? 3 : 2;
                 
                 if(state == 2)
@@ -76,19 +76,13 @@ int main() {
                 
             case 3: // Register (Checks if acct exists)
                 cout << "LIST OF USERS" << endl;
-                acctIndex = findAccount(Accounts, userinput);
+                acctIndex = findAccount(Accounts, accountNum);
                 state = (acctIndex == -1) ? 4 : 2;
                 
-                if(state == 4) {
-                    temp = new User;
-                    temp->setAccountNumber(userinput);
-                    cout << temp->getaccountNumber() << endl; // TEMP, TO CHECK USER LIST AS BEING BUILT
-                } else {
+                if(state == 2) {
                     cout << "Account already exists! Try again" << endl;
                 }
-                
                 break;
-                
             case 4: // Enter/validate pin
                 cout << "Please enter your desired PIN. | Q: Quit | B: Back" << endl;
                 cin >> pin;
@@ -102,9 +96,8 @@ int main() {
                 if(state == 4) {
                     cout << "Invalid PIN, please try again." << endl;
                 } else {
-                    temp->setPin(pin);
-                    temp->setCheckingAmount(400); // TEMP, GIVING STARTING BALANCE TO TEST WITHDRAW + DEPOSIT
-                    temp->setSavingsAmount(400); // TEMP, GIVING STARTING BALANCE TO TEST WITHDRAW + DEPOSIT
+                    temp = new User(accountNum, pin, 400, 400); // temp to set initial account balances
+                    //temp = new User(accountNum, pin) // uncomment this when done testing
                 }
                 break;
                 
