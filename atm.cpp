@@ -5,7 +5,6 @@
 #include <string>
 #include <time.h>
 #include <vector>
-#include <ctype.h>
 
 using namespace std;
 bool validateAccountNumber(string acctNumber);
