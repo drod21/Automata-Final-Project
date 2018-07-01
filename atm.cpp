@@ -77,15 +77,14 @@ int main() {
             case 3: // Register (Checks if acct exists)
                 cout << "LIST OF USERS" << endl;
                 acctIndex = findAccount(Accounts, userinput);
+                state = (acctIndex == -1) ? 4 : 2;
                 
-                if(acctIndex == -1) {
+                if(state == 4) {
                     temp = new User;
                     temp->setAccountNumber(userinput);
                     cout << temp->getaccountNumber() << endl; // TEMP, TO CHECK USER LIST AS BEING BUILT
-                    state = 4;
                 } else {
                     cout << "Account already exists! Try again" << endl;
-                    state = 2;
                 }
                 
                 break;
@@ -99,14 +98,13 @@ int main() {
                     break;
                 }
                 
-                if(!validatePin(pin)) {
+                state = (validatePin(pin)) ? 5 : 4;
+                if(state == 4) {
                     cout << "Invalid PIN, please try again." << endl;
-                    state = 4;
                 } else {
                     temp->setPin(pin);
                     temp->setCheckingAmount(400); // TEMP, GIVING STARTING BALANCE TO TEST WITHDRAW + DEPOSIT
                     temp->setSavingsAmount(400); // TEMP, GIVING STARTING BALANCE TO TEST WITHDRAW + DEPOSIT
-                    state = 5;
                 }
                 break;
                 
@@ -114,7 +112,6 @@ int main() {
                 cout << "ACCT CREATED!" << endl;
                 
                 Accounts.push_back(*temp); // AFTER PIN is valid
-                // TEMP, JUST MAKING SURE USERS ARE BEING ADDED TO LIST CORRECTLY
                 state = 1;
                 break;
                 
