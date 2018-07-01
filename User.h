@@ -56,7 +56,7 @@ class User {
        string success = "Successful withdrawal";
        string error = "Insufficient funds";
         
-        if (withdrawAmount > this->checkingAmount)
+        if (!sufficientFunds(withdrawAmount, "checking"))
             return error;
         
         this->checkingAmount -= withdrawAmount;
@@ -66,7 +66,7 @@ class User {
     string withdrawFromSavings(double withdrawAmount) {
         string success = "Successful withdrawal";
         string error = "Insufficient funds";
-        if (withdrawAmount > this->savingsAmount)
+        if (!sufficientFunds(withdrawAmount, "savings"))
             return error;
         
         this->savingsAmount -= withdrawAmount;
@@ -98,8 +98,12 @@ class User {
         return success;
     }
     
+    bool sufficientFunds(double withdrawAmount, string account) {
+        return (account == "checking") ? (withdrawAmount <= this->checkingAmount) : (withdrawAmount <= this->savingsAmount);
+    }
+    
     bool withdrawAmountValid(double withdrawAmount) {
-        return (withdrawAmount >= 10 && withdrawAmount <= 500) ? true : false;
+        return (withdrawAmount > 9 && withdrawAmount < 501) ? true : false;
     }
     
     bool validateAccountNumber(string accountNumber) {
