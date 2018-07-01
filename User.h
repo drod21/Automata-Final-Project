@@ -18,7 +18,7 @@ private:
     string pin;
     double checkingAmount;
     double savingsAmount;
-    time_t lockouttimer;
+    time_t lockoutTimer;
     
 public:
     // generates new user
@@ -27,18 +27,19 @@ public:
         this->pin = pin;
         this->savingsAmount = savingsAmount;
         this->checkingAmount = checkingAmount;
-        this->lockouttimer = 0;
+        this->lockoutTimer = 0;
     }
     
     User(string accountNumber, string pin) {
         this->accountNumber = accountNumber;
         this->pin = pin;
+        this->lockoutTimer = 0;
     }
     
     User() {
         savingsAmount = 0;
         checkingAmount = 0;
-        lockouttimer = 0;
+        lockoutTimer = 0;
     }
     
     string withdrawal(double withdrawAmount, string account) {
@@ -170,11 +171,11 @@ public:
     }
     
     time_t getTimerLockout() {
-        return this->lockouttimer;
+        return this->lockoutTimer;
     }
     
     void setTimerLockout() {
-        time(&lockouttimer);
+        time(&lockoutTimer);
     }
 };
 #endif /* User_h */
