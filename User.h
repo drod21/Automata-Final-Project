@@ -13,14 +13,14 @@
 using namespace std;
 
 class User {
-    private:
+private:
     string accountNumber;
     string pin;
     double checkingAmount;
     double savingsAmount;
     time_t lockouttimer;
     
-    public:
+public:
     // generates new user
     User(string accountNumber, string pin, double savingsAmount, double checkingAmount) {
         this->accountNumber = accountNumber;
@@ -52,9 +52,9 @@ class User {
             return withdrawFromSavings(withdrawAmount);
     }
     
-   string withdrawFromChecking(double withdrawAmount) {
-       string success = "Successful withdrawal";
-       string error = "Insufficient funds";
+    string withdrawFromChecking(double withdrawAmount) {
+        string success = "Successful withdrawal";
+        string error = "Insufficient funds";
         
         if (!sufficientFunds(withdrawAmount, "checking"))
             return error;
@@ -137,14 +137,14 @@ class User {
     void printCheckingInfo() {
         cout << "Remaining checking account balance: " << this->checkingAmount << "." << endl;
     }
-
+    
     void printSavingsAmount() {
         cout << "Remaining savings account balance: " << this->savingsAmount << "." << endl;
     }
     
     string getaccountNumber() {
-    	return accountNumber;
-	}
+        return accountNumber;
+    }
     
     string getPin() {
         return pin;
@@ -175,11 +175,11 @@ class User {
     }
     
     time_t getTimerLockout() {
-    	return this->lockouttimer;
-	}
-	
-	void setTimerLockout() {
-		time(&lockouttimer);
-	}
+        return this->lockouttimer;
+    }
+    
+    void setTimerLockout() {
+        time(&lockouttimer);
+    }
 };
 #endif /* User_h */
