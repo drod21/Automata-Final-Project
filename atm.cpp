@@ -10,6 +10,7 @@
 #include <unistd.h>
 #include <term.h>
 #include <chrono>
+#include <string>
 
 #define TIME_OUT_VAL 5 // 300 seconds = 5 minutes
 
@@ -90,7 +91,7 @@ int main() {
 
 
 			case REGISTER: // Register (Ask ACCT #, checks if 7 numbers only)
-				cout << "Please enter your desired account number, must be 7 numbers only. Q/q: Quit" << endl;
+				cout << "Please enter your desired account number, must be 7 numbers only. Q: Quit" << endl;
                 cout << "\n==> ";
                 cin >> userinput;
 
@@ -126,7 +127,7 @@ int main() {
                 break;
 
             case PIN_ENTER: // Enter/validate pin
-                cout << "Please enter your desired PIN. Q/q: Quit | B/b: Back" << endl;
+                cout << "Please enter your desired PIN. Q: Quit | B: Back" << endl;
                 cout << "\n==> ";
                 cin >> pin;
 
@@ -154,7 +155,7 @@ int main() {
                 break;
 
 			case LOGIN: // Login
-                cout << "Please enter your 7 digit account number. Q/q: Quit" << endl;
+                cout << "Please enter your 7 digit account number. Q: Quit" << endl;
                 cout << "\n==> ";
                 cin >> accountNum;
                 clearScreen();
@@ -270,16 +271,21 @@ int main() {
 
 
 			case WITHDRAW_CHECKING: // Withdraw-Checking
-                cout << "How much would you like to withdraw? MIN: $10 | MAX: $500 | 0: Quit | 1: Back" << endl;
+                cout << "How much would you like to withdraw? MIN: $10 | MAX: $500 | Q: Quit | B: Back" << endl;
                 cout << "\n==> ";
-                cin >> userNumberInput;
+                cin >> userinput;
 
-                if(userNumberInput == 0 || userNumberInput == 1) {
-                    state = (userNumberInput == 0) ? MAIN : WITHDRAW;
+                if(userinput == "Q" || userinput == "q") {
+                    state =  MAIN;
                     break;
                 }
 
-                withdrawAmountValid = ATM.withdrawAmountValid(userNumberInput);
+                if(userinput == "B" || userinput == "b"){
+                    state = WITHDRAW;
+                    break;
+                }
+
+                withdrawAmountValid = ATM.withdrawAmountValid(stoi(userinput));
 
                 if(!withdrawAmountValid) {
                     cout << "Invalid withdraw amount, please try again." << endl;
@@ -287,14 +293,14 @@ int main() {
                     break;
                 }
 
-                message = ATM.withdrawal(userNumberInput, "checking");
+                message = ATM.withdrawal(stoi(userinput), "checking");
                 if(message == "Insufficient funds.") {
                     cout << "ATM has insufficient funds." << endl;
                     state = WITHDRAW;
                     break;
                 }
 
-                message = Accounts[acctIndex].withdrawal(userNumberInput, "checking");
+                message = Accounts[acctIndex].withdrawal(stoi(userinput), "checking");
                 state = (message == "Insufficient funds.") ? WITHDRAW : OPTIONS;
                 if(state == WITHDRAW) {
                     cout << message << endl;
@@ -304,16 +310,26 @@ int main() {
                 break;
 
 			case WITHDRAW_SAVINGS: // Withdraw-Savings
-                cout << "How much would you like to withdraw? MIN: $10 | MAX: $500" << endl;
+                cout << "How much would you like to withdraw? MIN: $10 | MAX: $500 | Q: Quit | B: Back" << endl;
                 cout << "\n==> ";
-                cin >> userNumberInput;
+                cin >> userinput;
 
-                if (userNumberInput > ATM.getCheckingAmount()) {
+                if(userinput == "Q" || userinput == "q") {
+                    state =  MAIN;
+                    break;
+                }
+
+                if(userinput == "B" || userinput == "b"){
+                    state = WITHDRAW;
+                    break;
+                }
+
+                if (stoi(userinput) > ATM.getCheckingAmount()) {
                     cout << "Sorry, the ATM does not currently have sufficient funds" << endl;
                     state = WITHDRAW_SAVINGS;
                 }
                 
-                withdrawAmountValid = ATM.withdrawAmountValid(userNumberInput);
+                withdrawAmountValid = ATM.withdrawAmountValid(stoi(userinput));
                 
                 if(!withdrawAmountValid) {
                     cout << "Invalid withdraw amount, please try again." << endl;
@@ -321,14 +337,14 @@ int main() {
                     break;
                 }
                 
-                message = ATM.withdrawal(userNumberInput, "checking");
+                message = ATM.withdrawal(stoi(userinput), "checking");
                 if(message == "Insufficient funds.") {
                     cout << "ATM has insufficient funds."<< endl;
                     state = WITHDRAW;
                     break;
                 }
                 
-                message = Accounts[acctIndex].withdrawal(userNumberInput, "savings");
+                message = Accounts[acctIndex].withdrawal(stoi(userinput), "savings");
                 state = (message == "Insufficient funds.") ? WITHDRAW_SAVINGS : OPTIONS;
                 if(state == WITHDRAW) {
                     cout << message << endl;
@@ -360,39 +376,47 @@ int main() {
 
 
 			case DEPOSIT_CHECKING: // Deposit-Checking
-                cout << "Enter the amount you would like to deposit? 0: Quit | 1: Back" << endl;
+                cout << "Enter the amount you would like to deposit? Q: Quit | B: Back" << endl;
                 cout << "\n==> ";
-                cin >> userNumberInput;
+                cin >> userinput;
 
-                if(userNumberInput == 0 || userNumberInput == 1) {
-                    state = (userNumberInput == 0) ? MAIN : DEPOSIT;
+                if(userinput == "Q" || userinput == "q") {
+                    state =  MAIN;
                     break;
                 }
 
-                cout << "Depositing " << userNumberInput << " into checking account" << endl;
-                Accounts[acctIndex].depositToChecking(userNumberInput);
-                ATM.setCheckingAmount(ATM.getCheckingAmount() + userNumberInput);
+                if(userinput == "B" || userinput == "b"){
+                    state = DEPOSIT;
+                    break;
+                }
+
+                cout << "Depositing " << stoi(userinput) << " into checking account" << endl;
+                Accounts[acctIndex].depositToChecking(stoi(userinput));
+                ATM.setCheckingAmount(ATM.getCheckingAmount() + stoi(userinput));
 
                 state = OPTIONS;
                 this_thread::sleep_for (std::chrono::seconds(2));
                 break;
 
 			case DEPOSIT_SAVINGS: // Deposit-Savings
-                cout << "Enter the amount you would like to deposit? 0: Quit | 1: Back" << endl;
+                cout << "Enter the amount you would like to deposit? Q: Quit | B: Back" << endl;
                 cout << "\n==> ";
-                cin >> userNumberInput;
+                cin >> userinput;
 
-                if(userNumberInput == 0 || userNumberInput == 1) {
-                    state = (userNumberInput == 0) ? MAIN : DEPOSIT;
+                if(userinput == "Q" || userinput == "q") {
+                    state =  MAIN;
                     break;
                 }
 
-                cout << "Depositing " << userNumberInput << " into savings account" << endl;
-                Accounts[acctIndex].depositToSavings(userNumberInput);
-                ATM.setCheckingAmount(ATM.getCheckingAmount() + userNumberInput);
+                if(userinput == "B" || userinput == "b"){
+                    state = DEPOSIT;
+                    break;
+                }
 
-                /*cout << Accounts[acctIndex].getSavingsAmount() << endl; // TEMP, CHECKING AMOUNTS CHANGED
-                cout << ATM.getCheckingAmount() << endl; // TEMP, CHECKING AMOUNTS CHANGED*/
+                cout << "Depositing " << stoi(userinput) << " into savings account" << endl;
+                Accounts[acctIndex].depositToSavings(stoi(userinput));
+                ATM.setCheckingAmount(ATM.getCheckingAmount() + stoi(userinput));
+
                 state = OPTIONS;
                 this_thread::sleep_for (std::chrono::seconds(2));
                 break;
