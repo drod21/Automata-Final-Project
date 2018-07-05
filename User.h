@@ -13,13 +13,13 @@
 using namespace std;
 
 class User {
-private:
-    string accountNumber;
-    string pin;
-    double checkingAmount;
-    double savingsAmount;
-    time_t lockoutTimer;
-    
+    private:
+        string accountNumber;
+        string pin;
+        double checkingAmount;
+        double savingsAmount;
+        time_t lockoutTimer;
+
 public:
     // generates new user
     User(string accountNumber, string pin, double savingsAmount, double checkingAmount) {
@@ -43,7 +43,10 @@ public:
     }
     
     string withdrawal(double withdrawAmount, string account) {
-        return (account == "checking") ? withdrawFromChecking(withdrawAmount) : withdrawFromSavings(withdrawAmount);
+        if (account == "checking")
+            return withdrawFromChecking(withdrawAmount);
+        else
+            return withdrawFromSavings(withdrawAmount);
     }
     
     string withdrawFromChecking(double withdrawAmount) {
@@ -60,7 +63,7 @@ public:
     string withdrawFromSavings(double withdrawAmount) {
         string success = "Successful withdrawal";
         string error = "Insufficient funds";
-        
+
         if (!sufficientFunds(withdrawAmount, "savings"))
             return error;
         
@@ -80,7 +83,7 @@ public:
     
     string transferMoney(string toAccount, double transferAmount) {
         string success = "Successful transfer to " + toAccount + " account.";
-        
+
         if (toAccount == "checking" && this->savingsAmount >= transferAmount) {
             this->savingsAmount -= transferAmount;
             this->checkingAmount += transferAmount;
@@ -97,7 +100,7 @@ public:
     bool sufficientFunds(double withdrawAmount, string account) {
         return (account == "checking") ? (withdrawAmount <= this->checkingAmount) : (withdrawAmount <= this->savingsAmount);
     }
-    
+
     bool withdrawAmountValid(double withdrawAmount) {
         return (withdrawAmount > 9 && withdrawAmount < 501) ? true : false;
     }
@@ -133,7 +136,7 @@ public:
     void printCheckingAmount() {
         cout << "Checking account balance: $" << this->checkingAmount << "." << endl;
     }
-    
+
     void printSavingsAmount() {
         cout << "Savings account balance: $" << this->savingsAmount << "." << endl;
     }
@@ -173,7 +176,7 @@ public:
     time_t getTimerLockout() {
         return this->lockoutTimer;
     }
-    
+
     void setTimerLockout() {
         time(&lockoutTimer);
     }
