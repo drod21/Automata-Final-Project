@@ -7,6 +7,9 @@
 #include <vector>
 #include <thread>
 #include <mutex>
+#include <unistd.h>
+#include <term.h>
+#include <chrono>
 
 #define TIME_OUT_VAL 5 // 300 seconds = 5 minutes
 
@@ -15,6 +18,7 @@ bool validateAccountNumber(string acctNumber);
 bool validatePin(string pin);
 int findAccount(vector<User> accounts, string accountNum);
 void timer();
+void clearScreen();
 
 enum States{ MAIN,MAIN_WAIT,REGISTER,REGISTER_CHECK,PIN_ENTER,ACCT_CREATED,
             LOGIN,LOGIN_INVALID,LOGIN_OPTIONS,INVALID_PIN,OPTIONS,WITHDRAW,
@@ -129,8 +133,8 @@ int main() {
                 break;
 
             case ACCT_CREATED: // REQUEST + VALIDATE PIN before creating user
+                clearScreen();
                 cout << "***** ACCOUNT CREATED! *****" << endl;
-
                 Accounts.push_back(*temp); // AFTER PIN is valid
                 // TEMP, JUST MAKING SURE USERS ARE BEING ADDED TO LIST CORRECTLY
                 /*for(i = 0; i < Accounts.size(); i++) {
@@ -189,6 +193,7 @@ int main() {
                 break;
 
             case OPTIONS:
+                clearScreen();
                 cout << endl;
                 cout << "+++++++++++++++++++++++++++++++++++++++" << endl;
                 cout << "|       Select an option:             |" << endl;
@@ -256,6 +261,7 @@ int main() {
                     /*cout << Accounts[acctIndex].getCheckingAmount() << endl; // TEMP TO SEE ACCOUNTS CHECKING BALANCE AFTER
                     cout << ATM.getCheckingAmount() << endl; // TEMP TO SEE ATM CHECKING BALANCE AFTER*/
                     cout << message << endl;
+                    this_thread::sleep_for (std::chrono::seconds(2));
                     break;
                 } else {
                     cout << "Invalid withdraw amount, please try again!" << endl;
@@ -281,6 +287,7 @@ int main() {
                     /*cout << Accounts[acctIndex].getCheckingAmount() << endl; // TEMP TO SEE ACCOUNTS CHECKING BALANCE AFTER
                     cout << ATM.getCheckingAmount() << endl; // TEMP TO SEE ATM CHECKING BALANCE AFTER*/
                     cout << message << endl;
+                    this_thread::sleep_for (std::chrono::seconds(2));
                 } else {
                     cout << "Invalid withdraw amount, please try again!" << endl;
                     state = WITHDRAW_SAVINGS;
@@ -315,6 +322,7 @@ int main() {
         /*        cout << Accounts[acctIndex].getCheckingAmount() << endl; // TEMP, CHECKING AMOUNTS CHANGED
                 cout << ATM.getCheckingAmount() << endl; // TEMP, CHECKING AMOUNTS CHANGED*/
                 state = OPTIONS;
+                this_thread::sleep_for (std::chrono::seconds(2));
                 break;
 
 			case DEPOSIT_SAVINGS: // Deposit-Savings
@@ -329,6 +337,7 @@ int main() {
                 /*cout << Accounts[acctIndex].getSavingsAmount() << endl; // TEMP, CHECKING AMOUNTS CHANGED
                 cout << ATM.getCheckingAmount() << endl; // TEMP, CHECKING AMOUNTS CHANGED*/
                 state = OPTIONS;
+                this_thread::sleep_for (std::chrono::seconds(2));
                 break;
 
 			case CHECK_BALANCE: // Account Balance
@@ -351,11 +360,13 @@ int main() {
 
 			case CHECK_CHECKING: // Acct Bal Checking
                 cout << "Your checking account balance is: $" << Accounts[acctIndex].getCheckingAmount() << endl;
+                this_thread::sleep_for (std::chrono::seconds(2));
                 state = OPTIONS;
                 break;
 
 			case CHECK_SAVINGS: // Acct Bal Savings
                 cout << "Your savings account balance is: $" << Accounts[acctIndex].getSavingsAmount() << endl;
+                this_thread::sleep_for (std::chrono::seconds(2));
                 state = OPTIONS;
                 break;
 
@@ -382,7 +393,17 @@ void timer(){
     }
 }
 
+void clearScreen()
+{
+    if (!cur_term)
+    {
+        int result;
+        setupterm( NULL, STDOUT_FILENO, &result );
+        if (result <= 0) return;
+    }
 
+    putp( tigetstr( "clear" ) );
+}
 
 // returns the index of the account
 int findAccount(vector<User> accounts, string accountNum) {
@@ -418,3 +439,5 @@ bool validateAccountNumber(string acctNumber) {
     return true;
 }
 
+
+#pragma clang diagnostic pop
