@@ -399,12 +399,7 @@ bool validateAccountNumber(string acctNumber) {
     return true;
 }
 
-void clearScreen()
-{
-	int i;
-	for(i = 0; i < 80; i++)
-	{
-		cout << endl;
-	}
+void clearScreen() {
+    cout << string(30, '\n');
 }
 
