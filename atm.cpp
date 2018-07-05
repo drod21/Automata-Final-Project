@@ -5,8 +5,8 @@
 #include <string>
 #include <time.h>
 #include <vector>
-
 using namespace std;
+
 bool validateAccountNumber(string acctNumber);
 bool validatePin(string pin);
 int findAccount(vector<User> accounts, string accountNum);
@@ -14,36 +14,40 @@ void clearScreen();
 
 int main() {
     
+    // Initialize variables // 
     int state = 0;
-    string userInput;
     int i;
-    string accountNum;
-    string pin;
-    bool validAcct = true;
-    bool withdrawAmountValid = true;
-    int acctIndex;
-    User *temp;
-    vector<User> Accounts;
     int count = 0;
+    int acctIndex;
+
+	bool validAcct = true;
+    bool withdrawAmountValid = true;
     double userNumberInput;
     double difference;
     time_t curTime;
-    
+
+    string userInput;
+    string accountNum;
+    string pin;
     string message;
+    User *temp;
+    vector<User> Accounts;
+  	User ATM;
     
-    User ATM;
+  
     ATM.setCheckingAmount(90000);
-   // ATM.printCheckingAmount(); // TEMP (STARTING AMOUNT IN ATM)
     User *tempUser = new User("1234567", "1990", 600, 600);
     Accounts.push_back(*tempUser);
     
+    /*----------------------------*/ 
     while(true) {
         switch(state) {
-            case 0: // Main
-                cout << "Welcome to AMDO ATM!" << endl;
+            case 0: // Main State
+                cout << "Welcome to AMDO ATM! To register as a new user or login as an existing user, follow the menu below." << endl;
                 state = 1;
                 break;
-            case 1: // Mainwait
+            
+            case 1: // Main-wait State
                 cout << "R/r: Register | L/l: Login" << endl;
                 cin >> userInput;
                 clearScreen();
@@ -56,9 +60,9 @@ int main() {
                     state = 1;
                     cout << "Invalid option, please choose one of the below." << endl;
                 }
-
                 break;
-            case 2: // Register (Ask ACCT #, checks if 7 numbers only)
+            
+            case 2: // Register State (Ask ACCT #, checks if 7 numbers only)
                 cout << "Please enter your desired account number (it must be 7 numbers only). Q/q: Quit" << endl;
                 cin >> accountNum;
                 clearScreen();
@@ -73,11 +77,9 @@ int main() {
                 
                 if(state == 2)
                     cout << "Invalid account number, please try again." << endl;
-                
                 break;
                 
             case 3: // Register (Checks if acct exists)
-                //cout << "LIST OF USERS" << endl;
                 acctIndex = findAccount(Accounts, accountNum);
                 state = (acctIndex == -1) ? 4 : 2;
                 
@@ -85,7 +87,8 @@ int main() {
                     cout << "The account already exists. Please try again" << endl;
                 }
                 break;
-            case 4: // Enter/validate pin
+            
+            case 4: // PIN State - Enter/validate pin
                 cout << "Please enter your desired PIN. Q/q: Quit | B/b: Back" << endl;
                 cin >> pin;
                 clearScreen();
@@ -124,10 +127,12 @@ int main() {
                 acctIndex = findAccount(Accounts, accountNum);
                 state = (acctIndex >= 0) ? 13 : 12;
                 break;
+            
             case 12: // reset state for login
                 cout << "Invalid account number, please try again." << endl;
                 state = 11;
                 break;
+            
             case 13: //state for account options
                 time(&curTime);
                 difference = difftime(curTime,Accounts[acctIndex].getTimerLockout());
@@ -197,6 +202,7 @@ int main() {
                 }
                 
                 break;
+            
             case 161: // Withdraw-Checking
                 cout << "How much would you like to withdraw? MIN: $10 | MAX: $500 | 0: Quit | 1: Back" << endl;
                 cin >> userNumberInput;
@@ -266,6 +272,7 @@ int main() {
                    // ATM.printCheckingAmount(); // TEMP TO SEE ATM CHECKING BALANCE AFTER
                 }
                 break;
+            
             case 17: // Deposit
                 cout << "What account would you like to deposit to? C/c: Checking | S/s: Savings | Q/q: Quit | B/b: Back" << endl;
                 cin >> userInput;
@@ -285,6 +292,7 @@ int main() {
                     state = 17;
                 }
                 break;
+            
             case 171: // Deposit-Checking
                 cout << "Enter the amount you would like to deposit in Checking account? 0: Quit | 1: Back" << endl;
                 cin >> userNumberInput;
@@ -366,6 +374,7 @@ int main() {
     }
     return 0;
 }
+
 // returns the index of the account
 int findAccount(vector<User> accounts, string accountNum) {
     for(int i = 0; i < accounts.size(); i++) {
@@ -384,7 +393,6 @@ bool validatePin(string pin) {
             return false;
         }
     }
-    
     return true;
 }
 
@@ -403,4 +411,3 @@ bool validateAccountNumber(string acctNumber) {
 void clearScreen() {
     cout << string(30, '\n');
 }
-
