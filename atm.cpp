@@ -47,15 +47,14 @@ int main() {
                 cout << "R/r: Register | L/l: Login" << endl;
                 cin >> userInput;
                 clearScreen();
-                if((userInput != "R" || userInput != "r") && (userInput != "L" || userInput != "l")) {
-                    state = 1;
-                    cout << "Invalid option, please choose one of the below." << endl;
-                }
                 
                 if(userInput == "R" || userInput == "r") {
                     state = 2;
                 } else if(userInput == "L" || userInput == "l") {
                     state = 11;
+                } else {
+                    state = 1;
+                    cout << "Invalid option, please choose one of the below." << endl;
                 }
 
                 break;
@@ -276,13 +275,14 @@ int main() {
                     state = (userInput == "Q") ? 0 : 15;
                     break;
                 }
-                if((userInput != "C" || userInput != "c") && (userInput != "S" || userInput != "s")) {
-                    cout << "Invalid option, try again." << endl;
-                    state = 17;
-                } else if(userInput == "C" || userInput == "c") {
+                
+                if(userInput == "C" || userInput == "c") {
                     state = 171;
                 } else if(userInput == "S" || userInput == "s") {
                     state = 172;
+                } else {
+                    cout << "Invalid option, try again." << endl;
+                    state = 17;
                 }
                 break;
             case 171: // Deposit-Checking
@@ -335,13 +335,13 @@ int main() {
                     break;
                 }
                 
-                if((userInput != "C" || userInput != "c") && (userInput != "S" || userInput != "s")) {
-                    cout << "Invalid option, try again." << endl;
-                    state = 18;
-                } else if(userInput == "C" || userInput == "c") {
+                if(userInput == "C" || userInput == "c") {
                     state = 181;
                 } else if(userInput == "S" || userInput == "s") {
                     state = 182;
+                } else {
+                    cout << "Invalid option, try again." << endl;
+                    state = 18;
                 }
                 
                 break;
