@@ -14,11 +14,11 @@ using namespace std;
 
 class User {
     private:
-    string accountNumber;
-    string pin;
-    double checkingAmount;
-    double savingsAmount;
-    time_t lockouttimer;
+        string accountNumber;
+        string pin;
+        double checkingAmount;
+        double savingsAmount;
+        time_t lockouttimer;
     
     public:
     // generates new user
