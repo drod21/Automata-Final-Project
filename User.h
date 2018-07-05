@@ -13,50 +13,44 @@
 using namespace std;
 
 class User {
-    private:
+private:
     string accountNumber;
     string pin;
     double checkingAmount;
     double savingsAmount;
-    time_t lockouttimer;
+    time_t lockoutTimer;
     
-    public:
+public:
     // generates new user
     User(string accountNumber, string pin, double savingsAmount, double checkingAmount) {
         this->accountNumber = accountNumber;
         this->pin = pin;
         this->savingsAmount = savingsAmount;
         this->checkingAmount = checkingAmount;
+        this->lockoutTimer = 0;
     }
     
     User(string accountNumber, string pin) {
-        bool validAccount = validateAccountNumber(accountNumber);
-        bool pinValid = validatePin(pin);
-        
-        if(validAccount && pinValid) {
-            this->accountNumber = accountNumber;
-            this->pin = pin;
-        }
+        this->accountNumber = accountNumber;
+        this->pin = pin;
+        this->lockoutTimer = 0;
     }
     
     User() {
         savingsAmount = 0;
         checkingAmount = 0;
-        lockouttimer = 0;
+        lockoutTimer = 0;
     }
     
     string withdrawal(double withdrawAmount, string account) {
-        if (account == "checking")
-            return withdrawFromChecking(withdrawAmount);
-        else
-            return withdrawFromSavings(withdrawAmount);
+        return (account == "checking") ? withdrawFromChecking(withdrawAmount) : withdrawFromSavings(withdrawAmount);
     }
     
-   string withdrawFromChecking(double withdrawAmount) {
-       string success = "Successful withdrawal";
-       string error = "Insufficient funds";
+    string withdrawFromChecking(double withdrawAmount) {
+        string success = "Successful withdrawal";
+        string error = "Insufficient funds";
         
-        if (withdrawAmount > this->checkingAmount)
+        if (!sufficientFunds(withdrawAmount, "checking"))
             return error;
         
         this->checkingAmount -= withdrawAmount;
@@ -66,7 +60,8 @@ class User {
     string withdrawFromSavings(double withdrawAmount) {
         string success = "Successful withdrawal";
         string error = "Insufficient funds";
-        if (withdrawAmount > this->savingsAmount)
+        
+        if (!sufficientFunds(withdrawAmount, "savings"))
             return error;
         
         this->savingsAmount -= withdrawAmount;
@@ -85,6 +80,7 @@ class User {
     
     string transferMoney(string toAccount, double transferAmount) {
         string success = "Successful transfer to " + toAccount + " account.";
+        
         if (toAccount == "checking" && this->savingsAmount >= transferAmount) {
             this->savingsAmount -= transferAmount;
             this->checkingAmount += transferAmount;
@@ -98,8 +94,12 @@ class User {
         return success;
     }
     
+    bool sufficientFunds(double withdrawAmount, string account) {
+        return (account == "checking") ? (withdrawAmount <= this->checkingAmount) : (withdrawAmount <= this->savingsAmount);
+    }
+    
     bool withdrawAmountValid(double withdrawAmount) {
-        return (withdrawAmount >= 10 && withdrawAmount <= 500) ? true : false;
+        return (withdrawAmount > 9 && withdrawAmount < 501) ? true : false;
     }
     
     bool validateAccountNumber(string accountNumber) {
@@ -130,17 +130,17 @@ class User {
         return (pin == this->pin) ? true : false;
     }
     
-    void printCheckingInfo() {
-        cout << "Remaining checking account balance: " << this->checkingAmount << "." << endl;
+    void printCheckingAmount() {
+        cout << "Checking account balance: $" << this->checkingAmount << "." << endl;
     }
-
+    
     void printSavingsAmount() {
-        cout << "Remaining savings account balance: " << this->savingsAmount << "." << endl;
+        cout << "Savings account balance: $" << this->savingsAmount << "." << endl;
     }
     
     string getaccountNumber() {
-    	return accountNumber;
-	}
+        return accountNumber;
+    }
     
     string getPin() {
         return pin;
@@ -171,11 +171,11 @@ class User {
     }
     
     time_t getTimerLockout() {
-    	return this->lockouttimer;
-	}
-	
-	void setTimerLockout() {
-		time(&lockouttimer);
-	}
+        return this->lockoutTimer;
+    }
+    
+    void setTimerLockout() {
+        time(&lockoutTimer);
+    }
 };
 #endif /* User_h */
