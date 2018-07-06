@@ -2,3 +2,10 @@
 *.gch
 *.exe
 *.out
+*.o
+CMakeLists.txt
+cmake-build-debug/*
+.idea/*
+atm
+
+
