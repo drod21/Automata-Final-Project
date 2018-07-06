@@ -25,7 +25,7 @@ void clearScreen();
 enum States{ MAIN,MAIN_WAIT,REGISTER,REGISTER_CHECK,PIN_ENTER,ACCT_CREATED,
             LOGIN,LOGIN_INVALID,LOGIN_OPTIONS,INVALID_PIN,OPTIONS,WITHDRAW,
             WITHDRAW_CHECKING,WITHDRAW_SAVINGS,DEPOSIT,DEPOSIT_CHECKING,DEPOSIT_SAVINGS,
-            CHECK_BALANCE,CHECK_CHECKING,CHECK_SAVINGS,LOCKED_OUT};
+            CHECK_BALANCE,CHECK_CHECKING,CHECK_SAVINGS,LOCKED_OUT,TRANSFER,TRANSFER_STC,TRANSFER_CTS};
 
 States state = MAIN;
 time_t start = time(0);
@@ -68,7 +68,7 @@ int main() {
 			case MAIN_WAIT: // Mainwait
                 cout << "+++++++++++++++++++++++++++++++++++++++" << endl;
                 cout << "|                                     |" << endl;
-				cout << "|      R: Register    L: Login        |" << endl;
+		cout << "|      R: Register    L: Login        |" << endl;
                 cout << "|                                     |" << endl;
                 cout << "+++++++++++++++++++++++++++++++++++++++" << endl;
                 cout << "\n==> ";
@@ -214,6 +214,7 @@ int main() {
                 cout << "|                                     |" << endl;
                 cout << "|            W: Withdraw              |" << endl;
                 cout << "|            D: Deposit               |" << endl;
+		cout << "|            T: Transfer              |" << endl;
                 cout << "|            B: Account Balance       |" << endl;
                 cout << "|            Q: Quit                  |" << endl;
                 cout << "|                                     |" << endl;
@@ -238,6 +239,12 @@ int main() {
 
 				if(userinput == "B" || userinput == "b") {
 					state = CHECK_BALANCE;
+					break;
+				}
+
+				if(userinput == "t" || userinput == "T")
+				{
+					state = TRANSFER;
 					break;
 				}
 
@@ -461,6 +468,99 @@ int main() {
                 Accounts[acctIndex].setTimerLockout();
                 state = MAIN_WAIT; //Back to main menu
                 break;
+
+			case TRANSFER: // Transfer funds
+		cout << "Transfer from: | S: Savings-to-Checking | C: Checking-to-Savings | Q: Quit | B: Back |" << endl;
+		cin >> userinput;
+		if(userinput == "S" || userinput == "s")
+		{
+			state = TRANSFER_STC;
+			break;
+		} 
+		
+		if(userinput == "C" || userinput == "c")
+		{
+			state = TRANSFER_CTS;
+			break;
+		}
+		
+		if(userinput == "b" || userinput == "B")
+		{
+			state = OPTIONS;
+			break;			
+		}
+	
+		if(userinput == "q" || userinput == "Q")
+		{
+			state = MAIN;
+			break;
+		}
+
+		cout << "Invalid option, try again." << endl;
+		break;
+
+			case TRANSFER_STC:
+			cout << "How much would you like to transfer to your Checking account? | Q: Quit | B: Back" << endl;
+			cout << "Current savings balance is: " << Accounts[acctIndex].getSavingsAmount() << endl;
+			cin >> userinput;
+
+			if(userinput == "b" || userinput == "B")
+			{
+				state = TRANSFER;
+				break;
+			}
+
+			if(userinput == "Q" || userinput == "q")
+			{
+				state = MAIN;
+				break;
+			}
+
+			// ADD CHECK THAT USERINPUT WAS DIGIT
+
+			if(stod(userinput) <= Accounts[acctIndex].getSavingsAmount())
+			{
+				cout << userinput << " transferred to checking." << endl;
+				cout << "New savings account balance: " << Accounts[acctIndex].getSavingsAmount() << endl; // For some reason not appearing
+				cout << "New Checking account balance: " << Accounts[acctIndex].getCheckingAmount() << endl; // For some reason not appearing
+				Accounts[acctIndex].transferMoney("checking", stod(userinput));
+				state = OPTIONS;
+				break;
+			}
+			
+
+			cout << "Invalid amount / option, try again." << endl;
+			break;
+			
+			case TRANSFER_CTS:
+		
+			cout << "How much would you like to transfer to your Savings account? | Q: Quit | B: Back" << endl;
+			cout << "Current checking balance is: " << Accounts[acctIndex].getCheckingAmount() << endl;
+			cin >> userinput;
+
+			if(userinput == "b" || userinput == "B")
+			{
+				state = TRANSFER;
+				break;
+			}
+
+			if(userinput == "Q" || userinput == "q")
+			{
+				state = MAIN;
+				break;
+			}
+
+			// ADD CHECK THAT USERINPUT WAS DIGIT
+
+			if(stod(userinput) <= Accounts[acctIndex].getCheckingAmount())
+			{
+				cout << userinput << " transferred to checking." << endl;
+				cout << "New savings account balance: " << Accounts[acctIndex].getSavingsAmount() << endl; // For some reason not appearing
+				cout << "New Checking account balance: " << Accounts[acctIndex].getCheckingAmount() << endl; // For some reason not appearing
+				Accounts[acctIndex].transferMoney("savings", stod(userinput));
+				state = OPTIONS;
+				break;
+			}
         }
     }
     return 0;
