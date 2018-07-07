@@ -6,13 +6,12 @@
 #include <time.h>
 #include <vector>
 #include <thread>
-#include <mutex>
 #include <unistd.h>
 #include <term.h>
 #include <chrono>
 #include <string>
 
-#define TIME_OUT_VAL 5 // 300 seconds = 5 minutes
+#define TIME_OUT_VAL 300 // 300 seconds = 5 minutes
 
 using namespace std;
 
@@ -20,6 +19,7 @@ bool validateAccountNumber(string acctNumber);
 bool validatePin(string pin);
 int findAccount(vector<User> accounts, string accountNum);
 void timer();
+void main_thread();
 void clearScreen();
 
 enum States{ MAIN,MAIN_WAIT,REGISTER,REGISTER_CHECK,PIN_ENTER,ACCT_CREATED,
@@ -28,10 +28,27 @@ enum States{ MAIN,MAIN_WAIT,REGISTER,REGISTER_CHECK,PIN_ENTER,ACCT_CREATED,
             CHECK_BALANCE,CHECK_CHECKING,CHECK_SAVINGS,LOCKED_OUT};
 
 States state = MAIN;
+bool timed_out = false;
 time_t start = time(0);
-mutex m;
 
 int main() {
+    thread timer_t(timer);
+    thread main_t(main_thread);
+    timer_t.join();
+    cout << "\n\n ****** ATM TIMED OUT ******" << endl;
+    return 0;
+}
+
+void timer(){
+    while(true){
+        double seconds_since_start = difftime( time(0), start);
+        if(seconds_since_start == TIME_OUT_VAL){
+            break;
+        }
+    }
+}
+
+void main_thread(){
     // Initialize variables //
     int state = 0;
     int i;
@@ -57,41 +74,41 @@ int main() {
     User *tempUser = new User("1234567", "1990", 600, 600);
     Accounts.push_back(*tempUser);
 
-	while(true) {
-		switch(state) {
-			case MAIN: // Main
+    while(true) {
+        switch(state) {
+            case MAIN: // Main
                 clearScreen();
-				cout << "******** Welcome to AMDO ATM! *********" << endl;
-				state = MAIN_WAIT;
-				break;
+                cout << "******** Welcome to AMDO ATM! *********" << endl;
+                state = MAIN_WAIT;
+                break;
 
-			case MAIN_WAIT: // Mainwait
+            case MAIN_WAIT: // Mainwait
                 cout << "+++++++++++++++++++++++++++++++++++++++" << endl;
                 cout << "|                                     |" << endl;
-				cout << "|      R: Register    L: Login        |" << endl;
+                cout << "|      R: Register    L: Login        |" << endl;
                 cout << "|                                     |" << endl;
                 cout << "+++++++++++++++++++++++++++++++++++++++" << endl;
                 cout << "\n==> ";
-				cin >> userinput;
+                cin >> userinput;
 
 
                 if(userinput == "R" || userinput == "r") {
-					state = REGISTER;
-					break;
-				}
+                    state = REGISTER;
+                    break;
+                }
 
-				if(userinput == "L" || userinput == "l") {
-					state = LOGIN;
-					break;
-				}
+                if(userinput == "L" || userinput == "l") {
+                    state = LOGIN;
+                    break;
+                }
 
-				cout << "Invalid option " + userinput + " please choose one of the below\n" << endl;
-				state = MAIN_WAIT;
-				break;
+                cout << "Invalid option " + userinput + " please choose one of the below\n" << endl;
+                state = MAIN_WAIT;
+                break;
 
 
-			case REGISTER: // Register (Ask ACCT #, checks if 7 numbers only)
-				cout << "Please enter your desired account number, must be 7 numbers only. Q: Quit" << endl;
+            case REGISTER: // Register (Ask ACCT #, checks if 7 numbers only)
+                cout << "Please enter your desired account number, must be 7 numbers only. Q: Quit" << endl;
                 cout << "\n==> ";
                 cin >> userinput;
 
@@ -102,17 +119,17 @@ int main() {
 
                 validAcct = validateAccountNumber(userinput);
 
-				if(validAcct) {
-					state = REGISTER_CHECK;
+                if(validAcct) {
+                    state = REGISTER_CHECK;
 
                 } else {
-					cout << "Invalid account #, try again!" << endl;
-					state = REGISTER;
-				}
+                    cout << "Invalid account #, try again!" << endl;
+                    state = REGISTER;
+                }
 
                 break;
 
-			case REGISTER_CHECK: // Register (Checks if acct exists)
+            case REGISTER_CHECK: // Register (Checks if acct exists)
                 acctIndex = findAccount(Accounts, userinput);
 
                 if(acctIndex == -1) {
@@ -154,23 +171,23 @@ int main() {
                 state = MAIN_WAIT;
                 break;
 
-			case LOGIN: // Login
+            case LOGIN: // Login
                 cout << "Please enter your 7 digit account number. Q: Quit" << endl;
                 cout << "\n==> ";
                 cin >> accountNum;
                 clearScreen();
-                
+
                 if(accountNum == "Q" || accountNum == "q") {
                     state = MAIN;
                     break;
                 }
-                
+
                 acctIndex = findAccount(Accounts, accountNum);
                 if (acctIndex >= 0)
                     state = LOGIN_OPTIONS;
                 else
                     state = LOGIN_INVALID;
-				break;
+                break;
 
             case LOGIN_INVALID: // reset state for login
                 cout << "Invalid account number, please try again." << endl;
@@ -178,25 +195,25 @@ int main() {
                 break;
 
             case LOGIN_OPTIONS: //state for account options
-            	time(&curtime);
+                time(&curtime);
                 difference = difftime(curtime,Accounts[acctIndex].getTimerLockout());
-            	if(difference >= 30) {
-	            	cout << "Please input your 4 digit PIN number." << endl;
+                if(difference >= 30) {
+                    cout << "Please input your 4 digit PIN number." << endl;
                     cout << "\n==> ";
-	                cin >> pin;
+                    cin >> pin;
 
-	                if(Accounts[acctIndex].getPin() != pin && count < 2) {
-	                    state = INVALID_PIN;
-	                } else if(count == 2) {
-	                    state = LOCKED_OUT; // Locked state;
-	                } else {
-	                    state = OPTIONS;
-	                }
-				} else {
-					cout << "Account locked for " << 30 - difference << " more seconds." <<endl;
-					state = MAIN_WAIT;
-					break;
-				}
+                    if(Accounts[acctIndex].getPin() != pin && count < 2) {
+                        state = INVALID_PIN;
+                    } else if(count == 2) {
+                        state = LOCKED_OUT; // Locked state;
+                    } else {
+                        state = OPTIONS;
+                    }
+                } else {
+                    cout << "Account locked for " << 30 - difference << " more seconds." <<endl;
+                    state = MAIN_WAIT;
+                    break;
+                }
 
 
                 break;
@@ -227,25 +244,25 @@ int main() {
                 }
 
                 if(userinput == "W" || userinput == "w") {
-            		state = WITHDRAW;
-            		break;
-				}
+                    state = WITHDRAW;
+                    break;
+                }
 
-				if(userinput == "D" || userinput == "d") {
-					state = DEPOSIT;
-					break;
-				}
+                if(userinput == "D" || userinput == "d") {
+                    state = DEPOSIT;
+                    break;
+                }
 
-				if(userinput == "B" || userinput == "b") {
-					state = CHECK_BALANCE;
-					break;
-				}
+                if(userinput == "B" || userinput == "b") {
+                    state = CHECK_BALANCE;
+                    break;
+                }
 
-				cout << "Invalid Option! Please try again." << endl;
-				state = OPTIONS;
+                cout << "Invalid Option! Please try again." << endl;
+                state = OPTIONS;
                 break;
 
-			case WITHDRAW: // Withdraw
+            case WITHDRAW: // Withdraw
                 cout << "What account would you like to withdraw from? C: Checking | S: Savings | Q: Quit | B: Back" << endl;
                 cout << "\n==> ";
                 cin >> userinput;
@@ -270,7 +287,7 @@ int main() {
                 break;
 
 
-			case WITHDRAW_CHECKING: // Withdraw-Checking
+            case WITHDRAW_CHECKING: // Withdraw-Checking
                 cout << "How much would you like to withdraw? MIN: $10 | MAX: $500 | Q: Quit | B: Back" << endl;
                 cout << "\n==> ";
                 cin >> userinput;
@@ -309,7 +326,7 @@ int main() {
                 }
                 break;
 
-			case WITHDRAW_SAVINGS: // Withdraw-Savings
+            case WITHDRAW_SAVINGS: // Withdraw-Savings
                 cout << "How much would you like to withdraw? MIN: $10 | MAX: $500 | Q: Quit | B: Back" << endl;
                 cout << "\n==> ";
                 cin >> userinput;
@@ -328,22 +345,22 @@ int main() {
                     cout << "Sorry, the ATM does not currently have sufficient funds" << endl;
                     state = WITHDRAW_SAVINGS;
                 }
-                
+
                 withdrawAmountValid = ATM.withdrawAmountValid(stoi(userinput));
-                
+
                 if(!withdrawAmountValid) {
                     cout << "Invalid withdraw amount, please try again." << endl;
                     state = WITHDRAW_SAVINGS;
                     break;
                 }
-                
+
                 message = ATM.withdrawal(stoi(userinput), "checking");
                 if(message == "Insufficient funds.") {
                     cout << "ATM has insufficient funds."<< endl;
                     state = WITHDRAW;
                     break;
                 }
-                
+
                 message = Accounts[acctIndex].withdrawal(stoi(userinput), "savings");
                 state = (message == "Insufficient funds.") ? WITHDRAW_SAVINGS : OPTIONS;
                 if(state == WITHDRAW) {
@@ -354,7 +371,7 @@ int main() {
                 }
                 break;
 
-			case DEPOSIT: // Deposit
+            case DEPOSIT: // Deposit
                 cout << "What account would you like to deposit to? C: Checking | S: Savings | Q: Quit | B: Back" << endl;
                 cout << "\n==> ";
                 cin >> userinput;
@@ -375,7 +392,7 @@ int main() {
                 break;
 
 
-			case DEPOSIT_CHECKING: // Deposit-Checking
+            case DEPOSIT_CHECKING: // Deposit-Checking
                 cout << "Enter the amount you would like to deposit? Q: Quit | B: Back" << endl;
                 cout << "\n==> ";
                 cin >> userinput;
@@ -398,7 +415,7 @@ int main() {
                 this_thread::sleep_for (std::chrono::seconds(2));
                 break;
 
-			case DEPOSIT_SAVINGS: // Deposit-Savings
+            case DEPOSIT_SAVINGS: // Deposit-Savings
                 cout << "Enter the amount you would like to deposit? Q: Quit | B: Back" << endl;
                 cout << "\n==> ";
                 cin >> userinput;
@@ -421,7 +438,7 @@ int main() {
                 this_thread::sleep_for (std::chrono::seconds(2));
                 break;
 
-			case CHECK_BALANCE: // Account Balance
+            case CHECK_BALANCE: // Account Balance
                 cout << "What account balance would you like to see? C: Checking | S: Savings |  Q: Quit | B: Back" << endl;
                 cout << "\n==> ";
                 cin >> userinput;
@@ -443,37 +460,24 @@ int main() {
                 }
                 break;
 
-			case CHECK_CHECKING: // Acct Bal Checking
+            case CHECK_CHECKING: // Acct Bal Checking
                 cout << "Your checking account balance is: $" << Accounts[acctIndex].getCheckingAmount() << endl;
                 this_thread::sleep_for (std::chrono::seconds(2));
                 state = OPTIONS;
                 break;
 
-			case CHECK_SAVINGS: // Acct Bal Savings
+            case CHECK_SAVINGS: // Acct Bal Savings
                 cout << "Your savings account balance is: $" << Accounts[acctIndex].getSavingsAmount() << endl;
                 this_thread::sleep_for (std::chrono::seconds(2));
                 state = OPTIONS;
                 break;
 
-			case LOCKED_OUT: // locked state (NEEDS COMPLETED)
+            case LOCKED_OUT: // locked state (NEEDS COMPLETED)
                 cout << "LOCKED OUT FOR 30 SECONDS" << endl;
                 count = 0;
                 Accounts[acctIndex].setTimerLockout();
                 state = MAIN_WAIT; //Back to main menu
                 break;
-        }
-    }
-    return 0;
-}
-
-void timer(){
-    while(true){
-        double seconds_since_start = difftime( time(0), start);
-        if(seconds_since_start == TIME_OUT_VAL){
-            cout << "ATM TIMED OUT" << endl;
-            std::lock_guard<std::mutex> lock(m);
-            state = MAIN;
-            break;
         }
     }
 }
