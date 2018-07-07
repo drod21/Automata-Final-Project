@@ -82,19 +82,19 @@ public:
     }
     
     string transferMoney(string toAccount, double transferAmount) {
-        string success = "Successful transfer to " + toAccount + " account.";
-
-        if (toAccount == "checking" && this->savingsAmount >= transferAmount) {
+        string message = "Successful transfer to " + toAccount + " account.";
+        
+        if (toAccount == "checking" && sufficientFunds(transferAmount, "savings")) {
             this->savingsAmount -= transferAmount;
             this->checkingAmount += transferAmount;
-        }
-        
-        if (toAccount == "savings" && this->checkingAmount >= transferAmount) {
+        } else if (toAccount == "savings" && sufficientFunds(transferAmount, "checking")) {
             this->checkingAmount -= transferAmount;
             this->savingsAmount += transferAmount;
+        } else {
+            message = "Insufficient funds in " + toAccount + " for transfer."
         }
         
-        return success;
+        return message;
     }
     
     bool sufficientFunds(double withdrawAmount, string account) {
