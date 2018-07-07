@@ -91,7 +91,7 @@ public:
             this->checkingAmount -= transferAmount;
             this->savingsAmount += transferAmount;
         } else {
-            message = "Insufficient funds in " + toAccount + " for transfer."
+            message = "Insufficient funds in " + toAccount + " for transfer.";
         }
         
         return message;
