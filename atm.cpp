@@ -23,7 +23,8 @@ void timer();
 void clearScreen();
 
 enum States {
-    MAIN,MAIN_WAIT,REGISTER,REGISTER_CHECK,PIN_ENTER,ACCT_CREATED,
+    MAIN,MAIN_WAIT,
+    REGISTER,REGISTER_CHECK,PIN_ENTER, PIN_CONFIRM, ACCT_CREATED,
     LOGIN,LOGIN_INVALID,LOGIN_OPTIONS,INVALID_PIN,OPTIONS,WITHDRAW,
     WITHDRAW_CHECKING,WITHDRAW_SAVINGS,DEPOSIT,DEPOSIT_CHECKING,DEPOSIT_SAVINGS,
     CHECK_BALANCE,CHECK_CHECKING,CHECK_SAVINGS,LOCKED_OUT,TRANSFER,TRANSFER_STC,TRANSFER_CTS
@@ -49,6 +50,7 @@ int main() {
     string userinput;
     string accountNum;
     string pin;
+    string tempPin;
     string message;
     
     User *temp;
@@ -85,8 +87,6 @@ int main() {
                     state = MAIN_WAIT;
                 }
                 break;
-                
-                
             case REGISTER: // Register (Ask ACCT #, checks if 7 numbers only)
                 cout << "Please enter your desired account number, must be 7 numbers only. Q/q: Quit" << endl;
                 cout << "\n==> ";
@@ -94,10 +94,7 @@ int main() {
                 
                 if(userinput == "Q" || userinput == "q") {
                     state = MAIN;
-                    break;
-                }
-
-                if(validateAccountNumber(userinput)) {
+                } else if(validateAccountNumber(userinput)) {
                     state = REGISTER_CHECK;
                 } else {
                     cout << "Invalid account #, try again!" << endl;
@@ -118,21 +115,34 @@ int main() {
                 }
                 
                 break;
-            case PIN_ENTER: // Enter/validate pin
+            case PIN_ENTER: // Enter pin
                 cout << "Please enter your desired PIN. Q: Quit | B: Back" << endl;
                 cout << "\n==> ";
-                cin >> pin;
+                cin >> tempPin;
                 
-                if(pin == "Q" || pin == "B" || pin == "q" || pin == "b") {
-                    state = (pin == "Q") ? MAIN : REGISTER;
+                if(tempPin == "Q" || tempPin == "B" || tempPin == "q" || tempPin == "b") {
+                    state = (tempPin == "Q") ? MAIN : REGISTER;
                 } else if (!validatePin(pin)) {
                     cout << "INVALID PIN, please try again." << endl;
                     state = PIN_ENTER;
                 } else {
+                    state = PIN_CONFIRM;
+                }
+                
+                break;
+            case PIN_CONFIRM:
+                cout << "Please re-enter your PIN." << endl;
+                cout << "\n==> ";
+                cin >> pin;
+                
+                if (pin === tempPin) {
                     temp->setPin(pin);
                     temp->setCheckingAmount(400); // TEMP, GIVING STARTING BALANCE TO TEST WITHDRAW + DEPOSIT
                     temp->setSavingsAmount(400); // TEMP, GIVING STARTING BALANCE TO TEST WITHDRAW + DEPOSIT
                     state = ACCT_CREATED;
+                } else {
+                    cout << "PIN does not match, please try again." << endl;
+                    state = PIN_CONFIRM;
                 }
                 
                 break;
@@ -150,11 +160,10 @@ int main() {
                 
                 if(accountNum == "Q" || accountNum == "q") {
                     state = MAIN;
-                    break;
+                } else {
+                    acctIndex = findAccount(Accounts, accountNum);
+                    state = (acctIndex >= 0) ? LOGIN_OPTIONS : LOGIN_INVALID;
                 }
-                
-                acctIndex = findAccount(Accounts, accountNum);
-                state = (acctIndex >= 0) ? LOGIN_OPTIONS : LOGIN_INVALID;
                 break;
             case LOGIN_INVALID: // reset state for login
                 cout << "Invalid account number, please try again." << endl;
@@ -180,13 +189,13 @@ int main() {
                 } else {
                     state = OPTIONS;
                 }
+                
                 break;
             case INVALID_PIN:
                 state = LOGIN_OPTIONS;
                 count++;
                 cout << "INVALID PIN. " << 3-count << " Attempts remaining, Please try again." << endl;
                 break;
-                
             case OPTIONS:
                 clearScreen();
                 cout << "+++++++++++++++++++++++++++++++++++++++++" << endl;
@@ -233,8 +242,6 @@ int main() {
                     state = WITHDRAW;
                 }
                 break;
-                
-                
             case WITHDRAW_CHECKING: // Withdraw-Checking
                 cout << "How much would you like to withdraw? MIN: $10 | MAX: $500 | Q/q: Quit | B/b: Back" << endl;
                 cout << "\n==> ";
@@ -321,10 +328,7 @@ int main() {
                 
                 if(userinput == "Q" || userinput == "q" || userinput == "B" || userinput == "b") {
                     state = (userinput == "Q") ? MAIN : OPTIONS;
-                    break;
-                }
-                
-                if(userinput == "C" || userinput == "c") {
+                } else if(userinput == "C" || userinput == "c") {
                     state = DEPOSIT_CHECKING;
                 } else if(userinput == "S" || userinput == "s") {
                     state = DEPOSIT_SAVINGS;
@@ -332,9 +336,8 @@ int main() {
                     cout << "Invalid option, try again." << endl;
                     state = DEPOSIT;
                 }
+                
                 break;
-                
-                
             case DEPOSIT_CHECKING: // Deposit-Checking
                 cout << "Enter the amount you would like to deposit? Q/q: Quit | B/b: Back" << endl;
                 cout << "\n==> ";
