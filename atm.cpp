@@ -460,7 +460,7 @@ int main() {
                 if(message == "Successful transfer to checking account.") {
                     cout << message << "\nNew ";
                     Accounts[acctIndex].printCheckingAmount();
-                    cout << "New balance: $";
+                    cout << "New ";
                     Accounts[acctIndex].printSavingsAmount();
                     this_thread::sleep_for (std::chrono::seconds(4));
                     state = OPTIONS;
@@ -489,7 +489,7 @@ int main() {
                 if(message == "Successful transfer to savings account.") {
                     cout << message << "\nNew ";
                     Accounts[acctIndex].printCheckingAmount();
-                    cout << "New balance: $";
+                    cout << "New ";
                     Accounts[acctIndex].printSavingsAmount();
                     this_thread::sleep_for (std::chrono::seconds(4));
                     state = OPTIONS;
@@ -556,4 +556,3 @@ bool validateAccountNumber(string acctNumber) {
     }
     return true;
 }
-
