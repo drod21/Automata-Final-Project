@@ -122,7 +122,7 @@ int main() {
                 
                 if(tempPin == "Q" || tempPin == "B" || tempPin == "q" || tempPin == "b") {
                     state = (tempPin == "Q") ? MAIN : REGISTER;
-                } else if (!validatePin(pin)) {
+                } else if (!validatePin(tempPin)) {
                     cout << "INVALID PIN, please try again." << endl;
                     state = PIN_ENTER;
                 } else {
@@ -135,7 +135,7 @@ int main() {
                 cout << "\n==> ";
                 cin >> pin;
                 
-                if (pin === tempPin) {
+                if (pin == tempPin) {
                     temp->setPin(pin);
                     temp->setCheckingAmount(400); // TEMP, GIVING STARTING BALANCE TO TEST WITHDRAW + DEPOSIT
                     temp->setSavingsAmount(400); // TEMP, GIVING STARTING BALANCE TO TEST WITHDRAW + DEPOSIT
