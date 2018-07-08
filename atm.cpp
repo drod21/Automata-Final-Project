@@ -322,7 +322,7 @@ int main() {
                 break;
                 
             case DEPOSIT: // Deposit
-                cout << "What account would you like to deposit to? C: Checking | S/s: Savings | Q/q: Quit | B/b: Back" << endl;
+                cout << "What account would you like to deposit to? C/c: Checking | S/s: Savings | Q/q: Quit | B/b: Back" << endl;
                 cout << "\n==> ";
                 cin >> userinput;
                 
