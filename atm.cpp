@@ -359,7 +359,7 @@ int main() {
                 
                 state = OPTIONS;
                 Accounts[acctIndex].printCheckingAmount();
-                this_thread::sleep_for (std::chrono::seconds(2));
+                this_thread::sleep_for (std::chrono::seconds(4));
                 break;
                 
             case DEPOSIT_SAVINGS: // Deposit-Savings
@@ -382,7 +382,7 @@ int main() {
                 ATM.depositToChecking(stoi(userinput));
                 Accounts[acctIndex].printSavingsAmount();
                 state = OPTIONS;
-                this_thread::sleep_for (std::chrono::seconds(2));
+                this_thread::sleep_for (std::chrono::seconds(4));
                 break;
                 
             case CHECK_BALANCE: // Account Balance
@@ -405,13 +405,13 @@ int main() {
                 break;
             case CHECK_CHECKING: // Acct Bal Checking
                 cout << "Your checking account balance is: $" << Accounts[acctIndex].getCheckingAmount() << endl;
-                this_thread::sleep_for (std::chrono::seconds(2));
+                this_thread::sleep_for (std::chrono::seconds(4));
                 state = OPTIONS;
                 break;
                 
             case CHECK_SAVINGS: // Acct Bal Savings
                 cout << "Your savings account balance is: $" << Accounts[acctIndex].getSavingsAmount() << endl;
-                this_thread::sleep_for (std::chrono::seconds(2));
+                this_thread::sleep_for (std::chrono::seconds(4));
                 state = OPTIONS;
                 break;
                 
