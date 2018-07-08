@@ -123,7 +123,7 @@ int main() {
                 
                 if(tempPin == "Q" || tempPin == "B" || tempPin == "q" || tempPin == "b") {
                     state = (tempPin == "Q") ? MAIN : REGISTER;
-                } else if (!validatePin(pin)) {
+                } else if (!validatePin(tempPin)) {
                     cout << "Invalid PIN, please try again." << endl;
                     state = PIN_ENTER;
                 } else {
