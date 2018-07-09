@@ -51,7 +51,7 @@ public:
     
     string withdrawFromChecking(double withdrawAmount) {
         string success = "Successful withdrawal";
-        string error = "Insufficient funds";
+        string error = "Insufficient funds.";
         
         if (!sufficientFunds(withdrawAmount, "checking"))
             return error;
@@ -62,7 +62,7 @@ public:
     
     string withdrawFromSavings(double withdrawAmount) {
         string success = "Successful withdrawal";
-        string error = "Insufficient funds";
+        string error = "Insufficient funds.";
 
         if (!sufficientFunds(withdrawAmount, "savings"))
             return error;
@@ -91,7 +91,7 @@ public:
             this->checkingAmount -= transferAmount;
             this->savingsAmount += transferAmount;
         } else {
-            message = "Insufficient funds in " + toAccount + " for transfer.";
+            message = "Insufficient funds in account for transfer."; // Editted this line, as it output the wrong account name.
         }
         
         return message;
