@@ -63,7 +63,8 @@ int main() {
         switch(state) {
             case MAIN: // Main
                 clearScreen();
-                cout << "******** Welcome to AMDO ATM! *********" << endl;
+                cout << "********** Welcome to AMDO ATM! ***********" << endl;
+                cout << "\n";
                 state = MAIN_WAIT;
                 break;
                 
@@ -81,7 +82,7 @@ int main() {
                 } else if(userinput == "L" || userinput == "l") {
                     state = LOGIN;
                 } else {
-                    cout << "Invalid option " + userinput + " please choose one of the below\n" << endl;
+                    cout << "Invalid option " + userinput + " ,please choose one of the below\n" << endl;
                     state = MAIN_WAIT;
                 }
                 break;
@@ -106,7 +107,7 @@ int main() {
                 if(acctIndex == -1) {
                     state = PIN_ENTER;
                 } else {
-                    cout << "Account already exists! Try again" << endl;
+                    cout << "Account already exists! Please try again." << endl;
                     state = REGISTER;
                 }
                 
@@ -142,7 +143,7 @@ int main() {
                 break;
             case ACCT_CREATED: // REQUEST + VALIDATE PIN before creating user
                 clearScreen();
-                cout << "***** ACCOUNT CREATED! *****" << endl;
+                cout << "******** ACCOUNT CREATED! ***********" << endl;
                 Accounts.push_back(*temp); // AFTER PIN is valid
                 state = MAIN_WAIT;
                 break;
@@ -188,7 +189,7 @@ int main() {
             case INVALID_PIN:
                 state = LOGIN_OPTIONS;
                 count++;
-                cout << "INVALID PIN. " << 3-count << " Attempts remaining, Please try again." << endl;
+                cout << "INVALID PIN. " << 3-count << " attempts remaining, please try again." << endl;
                 break;
             case OPTIONS:
                 clearScreen();
@@ -216,12 +217,12 @@ int main() {
                 } else if(userinput == "T" || userinput == "t") {
                     state = TRANSFER;
                 } else {
-                    cout << "Invalid Option! Please try again." << endl;
+                    cout << "Invalid option! Please try again." << endl;
                     state = OPTIONS;
                 }
                 break;
             case WITHDRAW: // Withdraw
-                cout << "What account would you like to withdraw from? C/c: Checking | S/s: Savings | Q/q: Quit | B/b: Back" << endl;
+                cout << "Which account would you like to withdraw from? C/c: Checking | S/s: Savings | Q/q: Quit | B/b: Back" << endl;
                 cout << "\n==> ";
                 cin >> userinput;
                 
@@ -237,7 +238,7 @@ int main() {
                 }
                 break;
             case WITHDRAW_CHECKING: // Withdraw-Checking
-		cout << "Your current savings balance is: $" << Accounts[acctIndex].getCheckingAmount() << endl;
+				cout << "Your current savings balance is: $" << Accounts[acctIndex].getCheckingAmount() << endl;
                 cout << "How much would you like to withdraw? MIN: $10 | MAX: $500 | Q/q: Quit | B/b: Back" << endl;
                 cout << "\n==> ";
                 cin >> userinput;
@@ -274,7 +275,7 @@ int main() {
                 break;
                 
             case WITHDRAW_SAVINGS: // Withdraw-Savings
-		cout << "Your current savings balance is: $" << Accounts[acctIndex].getSavingsAmount() << endl;
+				cout << "Your current savings balance is: $" << Accounts[acctIndex].getSavingsAmount() << endl;
                 cout << "How much would you like to withdraw? MIN: $10 | MAX: $500 | Q/q: Quit | B/b: Back" << endl;
                 cout << "\n==> ";
                 cin >> userinput;
@@ -317,7 +318,7 @@ int main() {
                 break;
                 
             case DEPOSIT: // Deposit
-                cout << "What account would you like to deposit to? C/c: Checking | S/s: Savings | Q/q: Quit | B/b: Back" << endl;
+                cout << "Which account would you like to deposit to? C/c: Checking | S/s: Savings | Q/q: Quit | B/b: Back" << endl;
                 cout << "\n==> ";
                 cin >> userinput;
                 
@@ -328,7 +329,7 @@ int main() {
                 } else if(userinput == "S" || userinput == "s") {
                     state = DEPOSIT_SAVINGS;
                 } else {
-                    cout << "Invalid option, try again." << endl;
+                    cout << "Invalid option, please try again." << endl;
                     state = DEPOSIT;
                 }
                 
@@ -381,7 +382,7 @@ int main() {
                 break;
                 
             case CHECK_BALANCE: // Account Balance
-                cout << "What account balance would you like to see? C/c: Checking | S/s: Savings |  Q/q: Quit | B/b: Back" << endl;
+                cout << "Which account balance would you like to see? C/c: Checking | S/s: Savings |  Q/q: Quit | B/b: Back" << endl;
                 cout << "\n==> ";
                 cin >> userinput;
                 
@@ -418,7 +419,7 @@ int main() {
                 break;
                 
             case TRANSFER: // Transfer funds
-                cout << "Transfer from: | S/s: Savings-to-Checking | C/c: Checking-to-Savings | Q/q: Quit | B/b: Back |" << endl;
+                cout << "Transfer from: C/c: Checking-to-Savings | S/s: Savings-to-Checking | Q/q: Quit | B/b: Back" << endl;
                 cin >> userinput;
                 if(userinput == "S" || userinput == "s") {
                     state = TRANSFER_STC;
@@ -429,7 +430,7 @@ int main() {
                 } else if(userinput == "Q" || userinput == "q") {
                     state = MAIN;
                 } else {
-                    cout << "Invalid option, try again." << endl;
+                    cout << "Invalid option, please try again." << endl;
                 }
                 break;
                 
@@ -465,7 +466,7 @@ int main() {
             case TRANSFER_CTS:
                 cout << "Current ";
                 Accounts[acctIndex].printCheckingAmount();
-                cout << "How much would you like to transfer to your Savings account? | Q/q: Quit | B/b: Back" << endl;
+                cout << "How much would you like to transfer to your Savings account? Q/q: Quit | B/b: Back" << endl;
                 cin >> userinput;
                 
                 if(userinput == "B" || userinput == "b") {
