@@ -58,8 +58,6 @@ int main() {
     User ATM;
     
     ATM.setCheckingAmount(300);
-    User *tempUser = new User("1234567", "1990", 600, 600);
-    Accounts.push_back(*tempUser);
     
     while(true) {
         switch(state) {
@@ -106,8 +104,6 @@ int main() {
                 acctIndex = findAccount(Accounts, userinput);
                 
                 if(acctIndex == -1) {
-                    temp = new User;
-                    temp->setAccountNumber(userinput);
                     state = PIN_ENTER;
                 } else {
                     cout << "Account already exists! Try again" << endl;
@@ -136,9 +132,7 @@ int main() {
                 cin >> pin;
                 
                 if (pin == tempPin) {
-                    temp->setPin(pin);
-                    temp->setCheckingAmount(400); // TEMP, GIVING STARTING BALANCE TO TEST WITHDRAW + DEPOSIT
-                    temp->setSavingsAmount(400); // TEMP, GIVING STARTING BALANCE TO TEST WITHDRAW + DEPOSIT
+                    temp = new User(userinput, pin);
                     state = ACCT_CREATED;
                 } else {
                     cout << "PIN does not match, please try again." << endl;

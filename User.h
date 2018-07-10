@@ -34,6 +34,8 @@ public:
         this->accountNumber = accountNumber;
         this->pin = pin;
         this->lockoutTimer = 0;
+        this->savingsAmount = 0;
+        this->checkingAmount = 0;
     }
     
     User() {
