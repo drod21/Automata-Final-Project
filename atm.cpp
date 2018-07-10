@@ -12,14 +12,11 @@
 #include <chrono>
 #include <string>
 
-#define TIME_OUT_VAL 5 // 300 seconds = 5 minutes
-
 using namespace std;
 
 bool validateAccountNumber(string acctNumber);
 bool validatePin(string pin);
 int findAccount(vector<User> accounts, string accountNum);
-void timer();
 void clearScreen();
 
 enum States {
@@ -31,7 +28,6 @@ enum States {
 };
 
 States state = MAIN;
-time_t start = time(0);
 mutex m;
 
 int main() {
@@ -496,18 +492,6 @@ int main() {
         }
     }
     return 0;
-}
-
-void timer(){
-    while(true){
-        double seconds_since_start = difftime( time(0), start);
-        if(seconds_since_start == TIME_OUT_VAL) {
-            cout << "ATM TIMED OUT" << endl;
-            std::lock_guard<std::mutex> lock(m);
-            state = MAIN;
-            break;
-        }
-    }
 }
 
 void clearScreen() {
