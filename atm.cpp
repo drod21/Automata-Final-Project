@@ -84,7 +84,7 @@ int main() {
                 } else if(userinput == "L" || userinput == "l") {
                     state = LOGIN;
                 } else {
-                    cout << "Invalid option: " + userinput + ", please choose one of the options below.\n" << endl;
+                    cout << "Invalid option: " + userinput + ", please choose one of the options below. \n" << endl;
                     state = MAIN_WAIT;
                 }
                 break;
@@ -193,7 +193,7 @@ int main() {
             case INVALID_PIN:
                 state = LOGIN_OPTIONS;
                 count++;
-                cout << "Invalid PIN." << 3 - count << " attempts remaining, please try again." << endl;
+                cout << "Invalid PIN. " << 3 - count << " attempts remaining, please try again." << endl;
                 break;
             case OPTIONS:
                 clearScreen();
