@@ -458,7 +458,7 @@ int main() {
                 
                 // ADD CHECK THAT USERINPUT WAS DIGIT
                 message = Accounts[acctIndex].transferMoney("checking", stod(userinput));
-                if(message == "Successful transfer to Checking account.") {
+                if(message == "Successful transfer to checking account.") {
                     cout << message << "\nNew ";
                     Accounts[acctIndex].printCheckingAmount();
                     cout << "New ";
@@ -488,7 +488,7 @@ int main() {
                 // ADD CHECK THAT USERINPUT WAS DIGIT
                 
                 message = Accounts[acctIndex].transferMoney("savings", stod(userinput));
-                if(message == "Successful transfer to Savings account.") {
+                if(message == "Successful transfer to savings account.") {
                     cout << message << "\nNew ";
                     Accounts[acctIndex].printCheckingAmount();
                     cout << "New ";
