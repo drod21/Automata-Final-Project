@@ -8,8 +8,8 @@
 #include <iostream>
 #include <string>
 #include <time.h>
-#ifndef  User_h
-#define  User_h
+#ifndef User_h
+#define User_h
 
 using namespace std;
 
