@@ -23,9 +23,6 @@ using namespace std;
 bool validateAccountNumber(string acctNumber);
 bool validatePin(string pin);
 int findAccount(vector<User> accounts, string accountNum);
-
-int  findAccount(vector<User> accounts, string accountNum);
-void timer();
 void clearScreen();
 
 enum States {
@@ -87,7 +84,7 @@ int main() {
                 } else if(userinput == "L" || userinput == "l") {
                     state = LOGIN;
                 } else {
-                    cout << "Invalid option " + userinput + " , please choose one of the below\n" << endl;
+                    cout << "Invalid option: " + userinput + ", please choose one of the below\n" << endl;
                     state = MAIN_WAIT;
                 }
                 break;
@@ -143,7 +140,7 @@ int main() {
                 } else {
                     cout << "PIN does not match, please try again." << endl;
                     state = PIN_CONFIRM;
-                } 
+                }
                 
                 break;
             case ACCT_CREATED: // REQUEST + VALIDATE PIN before creating user
@@ -178,14 +175,13 @@ int main() {
                     break;
                 }
                 
-		 if(count != 3)
-		{
-                cout << "Please input your 4 digit PIN number." << endl;
-                cout << "\n==> ";
-                cin >> pin;
-		}
+                if(count < 3) {
+                    cout << "Please input your 4 digit PIN number." << endl;
+                    cout << "\n==> ";
+                    cin >> pin;
+                }
                 
-                if(Accounts[acctIndex].getPin() != pin && count <= 2) {
+                if(Accounts[acctIndex].getPin() != pin && count < 3) {
                     state = INVALID_PIN;
                 } else if(count == 3) {
                     state = LOCKED_OUT; // Locked state;
@@ -197,7 +193,7 @@ int main() {
             case INVALID_PIN:
                 state = LOGIN_OPTIONS;
                 count++;
-                cout << "INVALID PIN. " << 3-count << " attempts remaining, please try again." << endl;
+                cout << "INVALID PIN. " << 3 - count << " attempts remaining, please try again." << endl;
                 break;
             case OPTIONS:
                 clearScreen();
@@ -246,7 +242,7 @@ int main() {
                 }
                 break;
             case WITHDRAW_CHECKING: // Withdraw-Checking
-				cout << "Your current savings balance is: $" << Accounts[acctIndex].getCheckingAmount() << endl;
+                cout << "Your current savings balance is: $" << Accounts[acctIndex].getCheckingAmount() << endl;
                 cout << "How much would you like to withdraw? MIN: $10 | MAX: $500 | Q/q: Quit | B/b: Back" << endl;
                 cout << "\n==> ";
                 cin >> userinput;
@@ -283,7 +279,7 @@ int main() {
                 break;
                 
             case WITHDRAW_SAVINGS: // Withdraw-Savings
-				cout << "Your current savings balance is: $" << Accounts[acctIndex].getSavingsAmount() << endl;
+                cout << "Your current savings balance is: $" << Accounts[acctIndex].getSavingsAmount() << endl;
                 cout << "How much would you like to withdraw? MIN: $10 | MAX: $500 | Q/q: Quit | B/b: Back" << endl;
                 cout << "\n==> ";
                 cin >> userinput;
