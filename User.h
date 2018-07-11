@@ -1,14 +1,15 @@
-//
-//  User.h
-//  
-//
-//  Created by Derek Rodriguez on 6/15/18.
-//
+//  Project name: Automation Process of an ATM
+//  File name: User.h
+//  Owner: Derek Rodriguez
+//  Contributors: Osniel, My, Anthony
+//  Date created: 6/15/18
+//  Purpose: Holds new user, Saving and Checking account information, etc.  
+
 #include <iostream>
 #include <string>
 #include <time.h>
-#ifndef User_h
-#define User_h
+#ifndef  User_h
+#define  User_h
 
 using namespace std;
 
@@ -34,8 +35,8 @@ public:
         this->accountNumber = accountNumber;
         this->pin = pin;
         this->lockoutTimer = 0;
-        this->savingsAmount = 0;
-        this->checkingAmount = 0;
+        this->savingsAmount = 301;
+        this->checkingAmount = 301;
     }
     
     User() {
@@ -52,7 +53,7 @@ public:
     }
     
     string withdrawFromChecking(double withdrawAmount) {
-        string success = "Successful withdrawal";
+        string success = "Successful withdrawal.";
         string error = "Insufficient funds.";
         
         if (!sufficientFunds(withdrawAmount, "checking"))
@@ -63,7 +64,7 @@ public:
     }
     
     string withdrawFromSavings(double withdrawAmount) {
-        string success = "Successful withdrawal";
+        string success = "Successful withdrawal.";
         string error = "Insufficient funds.";
 
         if (!sufficientFunds(withdrawAmount, "savings"))
@@ -75,12 +76,12 @@ public:
     
     string depositToChecking(double depositAmount) {
         this->checkingAmount += depositAmount;
-        return "Successful deposit to Checking";
+        return "Successful deposit to Checking.";
     }
     
     string depositToSavings(double depositAmount) {
         this->savingsAmount += depositAmount;
-        return "Successful deposit to Savings";
+        return "Successful deposit to Savings.";
     }
     
     string transferMoney(string toAccount, double transferAmount) {
@@ -136,11 +137,11 @@ public:
     }
     
     void printCheckingAmount() {
-        cout << "Checking account balance: $" << this->checkingAmount << "." << endl;
+        cout << "Checking account balance: $" << this->checkingAmount << endl;
     }
 
     void printSavingsAmount() {
-        cout << "Savings account balance: $" << this->savingsAmount << "." << endl;
+        cout << "Savings account balance: $" << this->savingsAmount << endl;
     }
     
     string getaccountNumber() {

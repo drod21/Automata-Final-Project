@@ -1,4 +1,10 @@
-// this file will be our main file
+//  Project name: Automation Process of an ATM
+//  File name: atm.cpp
+//  Owner: Derek Rodriguez
+//  Contributors: Osniel, My, Anthony
+//  Date created: 6/15/18
+//  Purpose: Automation process of ATM machine.
+
 #include <stdlib.h>
 #include "User.h"
 #include <iostream>
@@ -17,6 +23,9 @@ using namespace std;
 bool validateAccountNumber(string acctNumber);
 bool validatePin(string pin);
 int findAccount(vector<User> accounts, string accountNum);
+
+int  findAccount(vector<User> accounts, string accountNum);
+void timer();
 void clearScreen();
 
 enum States {
@@ -78,7 +87,7 @@ int main() {
                 } else if(userinput == "L" || userinput == "l") {
                     state = LOGIN;
                 } else {
-                    cout << "Invalid option " + userinput + " ,please choose one of the below\n" << endl;
+                    cout << "Invalid option " + userinput + " , please choose one of the below\n" << endl;
                     state = MAIN_WAIT;
                 }
                 break;
@@ -92,7 +101,7 @@ int main() {
                 } else if(validateAccountNumber(userinput)) {
                     state = REGISTER_CHECK;
                 } else {
-                    cout << "Invalid account #, try again!" << endl;
+                    cout << "Invalid account number, please try again." << endl;
                     state = REGISTER;
                 }
                 
@@ -139,7 +148,7 @@ int main() {
                 break;
             case ACCT_CREATED: // REQUEST + VALIDATE PIN before creating user
                 clearScreen();
-                cout << "******** ACCOUNT CREATED! ***********" << endl;
+                cout << "*********** ACCOUNT CREATED! **************" << endl;
                 Accounts.push_back(*temp); // AFTER PIN is valid
                 state = MAIN_WAIT;
                 break;
@@ -169,13 +178,16 @@ int main() {
                     break;
                 }
                 
+		 if(count != 3)
+		{
                 cout << "Please input your 4 digit PIN number." << endl;
                 cout << "\n==> ";
                 cin >> pin;
+		}
                 
-                if(Accounts[acctIndex].getPin() != pin && count < 2) {
+                if(Accounts[acctIndex].getPin() != pin && count <= 2) {
                     state = INVALID_PIN;
-                } else if(count == 2) {
+                } else if(count == 3) {
                     state = LOCKED_OUT; // Locked state;
                 } else {
                     state = OPTIONS;
@@ -319,7 +331,7 @@ int main() {
                 cin >> userinput;
                 
                 if(userinput == "Q" || userinput == "q" || userinput == "B" || userinput == "b") {
-                    state = (userinput == "Q") ? MAIN : OPTIONS;
+                    state = (userinput == "Q" || userinput == "q") ? MAIN : OPTIONS;
                 } else if(userinput == "C" || userinput == "c") {
                     state = DEPOSIT_CHECKING;
                 } else if(userinput == "S" || userinput == "s") {
@@ -536,4 +548,3 @@ bool validateAccountNumber(string acctNumber) {
     }
     return true;
 }
-
