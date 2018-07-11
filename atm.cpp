@@ -84,12 +84,12 @@ int main() {
                 } else if(userinput == "L" || userinput == "l") {
                     state = LOGIN;
                 } else {
-                    cout << "Invalid option: " + userinput + ", please choose one of the below\n" << endl;
+                    cout << "Invalid option: " + userinput + ", please choose one of the options below.\n" << endl;
                     state = MAIN_WAIT;
                 }
                 break;
             case REGISTER: // Register (Ask ACCT #, checks if 7 numbers only)
-                cout << "Please enter your desired account number, must be 7 numbers only. Q/q: Quit" << endl;
+                cout << "Please enter your desired account number, must only be 7 numbers. Q/q: Quit" << endl;
                 cout << "\n==> ";
                 cin >> userinput;
                 
@@ -109,20 +109,20 @@ int main() {
                 if(acctIndex == -1) {
                     state = PIN_ENTER;
                 } else {
-                    cout << "Account already exists! Please try again." << endl;
+                    cout << "Account already exists, please try again." << endl;
                     state = REGISTER;
                 }
                 
                 break;
             case PIN_ENTER: // Enter pin
-                cout << "Please enter your desired PIN. Q: Quit | B: Back" << endl;
+                cout << "Please enter your desired PIN, must only be 4 numbers. Q: Quit | B: Back" << endl;
                 cout << "\n==> ";
                 cin >> tempPin;
                 
                 if(tempPin == "Q" || tempPin == "B" || tempPin == "q" || tempPin == "b") {
                     state = (tempPin == "Q") ? MAIN : REGISTER;
                 } else if (!validatePin(tempPin)) {
-                    cout << "INVALID PIN, please try again." << endl;
+                    cout << "Invalid PIN, please try again." << endl;
                     state = PIN_ENTER;
                 } else {
                     state = PIN_CONFIRM;
@@ -193,7 +193,7 @@ int main() {
             case INVALID_PIN:
                 state = LOGIN_OPTIONS;
                 count++;
-                cout << "INVALID PIN. " << 3 - count << " attempts remaining, please try again." << endl;
+                cout << "Invalid PIN." << 3 - count << " attempts remaining, please try again." << endl;
                 break;
             case OPTIONS:
                 clearScreen();
@@ -221,7 +221,7 @@ int main() {
                 } else if(userinput == "T" || userinput == "t") {
                     state = TRANSFER;
                 } else {
-                    cout << "Invalid option! Please try again." << endl;
+                    cout << "Invalid option, please try again." << endl;
                     state = OPTIONS;
                 }
                 break;
@@ -237,7 +237,7 @@ int main() {
                 } else if(userinput == "S" || userinput == "s") {
                     state = WITHDRAW_SAVINGS;
                 } else {
-                    cout << "Invalid option, please try again!" << endl;
+                    cout << "Invalid option, please try again." << endl;
                     state = WITHDRAW;
                 }
                 break;
@@ -397,7 +397,7 @@ int main() {
                 } else if(userinput == "S" || userinput == "s") {
                     state = CHECK_SAVINGS;
                 } else {
-                    cout << "Invalid option, try again" << endl;
+                    cout << "Invalid option, please try again." << endl;
                     this_thread::sleep_for (std::chrono::seconds(4));
                     state = CHECK_BALANCE;
                 }
@@ -416,7 +416,7 @@ int main() {
                 break;
                 
             case LOCKED_OUT: // locked state (NEEDS COMPLETED)
-                cout << "LOCKED OUT FOR 30 SECONDS" << endl;
+                cout << "LOCKED OUT FOR 30 SECONDS!" << endl;
                 count = 0;
                 Accounts[acctIndex].setTimerLockout();
                 state = MAIN_WAIT; //Back to main menu
