@@ -353,7 +353,7 @@ int main() {
                     break;
                 }
                 
-                cout << "Depositing $" << stoi(userinput) << " into checking account." << endl;
+                cout << "Depositing $" << stoi(userinput) << " into Checking account." << endl;
                 Accounts[acctIndex].depositToChecking(stoi(userinput));
                 ATM.depositToChecking(stoi(userinput));
                 
@@ -377,7 +377,7 @@ int main() {
                     break;
                 }
                 
-                cout << "Depositing $" << stoi(userinput) << " into savings account." << endl;
+                cout << "Depositing $" << stoi(userinput) << " into Savings account." << endl;
                 Accounts[acctIndex].depositToSavings(stoi(userinput));
                 ATM.depositToChecking(stoi(userinput));
                 Accounts[acctIndex].printSavingsAmount();
@@ -404,13 +404,13 @@ int main() {
                 
                 break;
             case CHECK_CHECKING: // Acct Bal Checking
-                cout << "Your checking account balance is: $" << Accounts[acctIndex].getCheckingAmount() << endl;
+                cout << "Your Checking account balance is: $" << Accounts[acctIndex].getCheckingAmount() << endl;
                 this_thread::sleep_for (std::chrono::seconds(4));
                 state = OPTIONS;
                 break;
                 
             case CHECK_SAVINGS: // Acct Bal Savings
-                cout << "Your savings account balance is: $" << Accounts[acctIndex].getSavingsAmount() << endl;
+                cout << "Your Savings account balance is: $" << Accounts[acctIndex].getSavingsAmount() << endl;
                 this_thread::sleep_for (std::chrono::seconds(4));
                 state = OPTIONS;
                 break;
