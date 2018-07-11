@@ -353,7 +353,7 @@ int main() {
                     break;
                 }
                 
-                cout << "Depositing " << stoi(userinput) << " into checking account" << endl;
+                cout << "Depositing $" << stoi(userinput) << " into checking account." << endl;
                 Accounts[acctIndex].depositToChecking(stoi(userinput));
                 ATM.depositToChecking(stoi(userinput));
                 
@@ -377,7 +377,7 @@ int main() {
                     break;
                 }
                 
-                cout << "Depositing " << stoi(userinput) << " into savings account" << endl;
+                cout << "Depositing $" << stoi(userinput) << " into savings account." << endl;
                 Accounts[acctIndex].depositToSavings(stoi(userinput));
                 ATM.depositToChecking(stoi(userinput));
                 Accounts[acctIndex].printSavingsAmount();
