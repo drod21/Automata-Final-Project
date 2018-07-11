@@ -416,6 +416,7 @@ int main() {
                 break;
                 
             case LOCKED_OUT: // locked state (NEEDS COMPLETED)
+                cout << "\n";
                 cout << "LOCKED OUT FOR 30 SECONDS!" << endl;
                 count = 0;
                 Accounts[acctIndex].setTimerLockout();
